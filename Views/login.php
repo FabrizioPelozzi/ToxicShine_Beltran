@@ -27,7 +27,7 @@
       <!-- Ajustar tamaño de la imagen -->
       <img src="../Util/Img/avatar5.png" class="profile-user img-fluid img-circle" style="width: 50px; height: 50px;">
       <!-- Espacio entre la imagen y el texto -->
-      <a href="../Index.php" style="margin-left: 10px;"><b>Toxic</b>SHINE</a>
+      <a href="Index.php" style="margin-left: 10px;"><b>Toxic</b>SHINE</a>
     </div>
   </div>
   <!-- /.login-logo -->
@@ -60,7 +60,8 @@
       </div>
       </form>
       <p class="mb-0">
-        <a href="register.php" class="text-center">Registrarse</a>
+        <a href="register.php" class="text-center">Registrarse</a> <br>
+        <a href="recuperar.php" class="text-center">Recuperar contraseña</a>
       </p>
     </div>
     <!-- /.login-card-body -->

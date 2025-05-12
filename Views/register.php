@@ -82,7 +82,7 @@
       <!-- Ajustar tamaño de la imagen -->
       <img src="../Util/Img/avatar5.png" class="profile-user img-fluid img-circle" style="width: 50px; height: 50px;">
       <!-- Espacio entre la imagen y el texto -->
-      <a href="../Index.php" style="margin-left: 10px;"><b>Toxic</b>SHINE</a>
+      <a href="Index.php" style="margin-left: 10px;"><b>Toxic</b>SHINE</a>
     </div>
   </div>
   <!-- /.login-logo -->

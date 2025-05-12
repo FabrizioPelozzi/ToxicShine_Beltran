@@ -34,6 +34,8 @@
 <script src="../Util/Js/demo.js"></script>
 <!-- Aditional-Methods -->
 <script src="../Util/Js/additional-methods.min.js"></script>
+<!-- Carga de menues, toast y loader -->
+<script src="../Views/Layouts/General/precarga.js"></script>
 
 </body>
 </html>

@@ -11,8 +11,7 @@ $(document).ready(function() {
         });
     }
 
-    $("#form-login").submit(e => {
-        
+    $("#form-login").submit(e => { 
 
         funcion = "login";
         let user = $("#user").val();
@@ -23,7 +22,7 @@ $(document).ready(function() {
             if (response == "logueado") {
                 toastr.success("Logueado!");
                 console.log(response);
-                location.href = "../Index.php";
+                location.href = "Index.php";
             } else {
                 toastr.error("Usuario o contraseña incorrectos");
                 console.log(response);

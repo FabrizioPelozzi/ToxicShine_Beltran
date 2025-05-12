@@ -10,12 +10,13 @@ if ($_POST["funcion"] == "login") {
     $usuario->loguearse($user, $pass);
     if ($usuario->objetos != null) {
         foreach ($usuario->objetos as $objeto) {
-            $_SESSION["id_usuario"] = $objeto->id_usuario;
-            $_SESSION["email"] = $objeto->email;
-            $_SESSION["contrasena"] = $objeto->contrasena;
-            $_SESSION["id_tipo_usuario"] = $objeto->id_tipo_usuario;
-            $_SESSION["nombre"] = $objeto->nombre;
-        }
+        $_SESSION["id_usuario"]      = $objeto['id_usuario'];
+        $_SESSION["email"]           = $objeto['email'];
+        $_SESSION["contrasena"]      = $objeto['contrasena'];
+        $_SESSION["id_tipo_usuario"] = $objeto['id_tipo_usuario'];
+        $_SESSION["nombre"]          = $objeto['nombre'];
+    }
+
         echo "logueado";
     } 
 }
