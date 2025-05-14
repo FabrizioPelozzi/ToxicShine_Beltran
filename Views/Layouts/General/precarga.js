@@ -127,15 +127,21 @@ function llenar_menu_lateral(usuario) {
                     </a>
                 </li>
                 <li id="nav_registro" class="nav-item">
-                    <a id="active_nav_registro" href="../Views/registro.php" class="nav-link">
+                    <a id="active_nav_registro" href="../Views/admin_compras.php" class="nav-link">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p id="nav_cont_reg">Administrar compras</p>
                     </a>
                 </li>
-                <li id="nav_clientes" class="nav-item">
-                    <a id="active_nav_clientes" href="../Views/admin_clientes.php" class="nav-link">
+                <li id="nav_usuarios" class="nav-item">
+                    <a id="active_nav_usuarios" href="../Views/admin_usuarios.php" class="nav-link">
                         <i class="nav-icon fa-solid fa-users"></i>
-                        <p id="nav_cont_cli">Administrar clientes</p>
+                        <p id="nav_cont_cli">Administrar usuarios</p>
+                    </a>
+                </li>
+                <li id="nav_admin_soporte" class="nav-item">
+                    <a id="active_nav_admin_soporte" href="../Views/admin_soporte.php" class="nav-link">
+                        <i class="nav-icon fa-solid fa-phone-volume"></i>
+                        <p id="nav_cont_cli">Administrar peticiones</p>
                     </a>
                 </li>
             `;

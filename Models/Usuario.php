@@ -116,21 +116,55 @@ class Usuario {
     }
 
     public function cambiar_password(string $email, string $nueva_pass): bool {
-    $sql = "UPDATE usuario SET contrasena = :pass WHERE email = :email";
-    $stmt = $this->acceso->prepare($sql);
+        $sql = "UPDATE usuario SET contrasena = :pass WHERE email = :email";
+        $stmt = $this->acceso->prepare($sql);
 
-    try {
-        $stmt->execute([
-            ':pass'  => $nueva_pass, // ya viene hasheada
-            ':email' => $email
-        ]);
-        return true;
-    } catch (PDOException $e) {
-        error_log("Error al cambiar contraseña: " . $e->getMessage());
-        return false;
+        try {
+            $stmt->execute([
+                ':pass'  => $nueva_pass, // ya viene hasheada
+                ':email' => $email
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            error_log("Error al cambiar contraseña: " . $e->getMessage());
+            return false;
+        }
     }
-}
 
+    // Trae todos los usuarios
+
+    public function obtener_usuarios($dni = '') {
+        $sql = "SELECT 
+                    u.id_usuario,
+                    u.email,
+                    u.dni,
+                    u.nombre,
+                    u.apellido,
+                    u.telefono,
+                    tu.tipo_usuario
+                FROM usuario u
+                JOIN tipo_usuario tu ON u.id_tipo_usuario = tu.id_tipo_usuario
+                WHERE u.id_tipo_usuario <> 3";
+        // filtro DNI
+        if ($dni !== '') {
+            $sql .= " AND u.dni LIKE :dni";
+        }
+        $sql .= " ORDER BY u.nombre, u.apellido";
+
+        $query = $this->acceso->prepare($sql);
+        if ($dni !== '') {
+            $query->execute([':dni' => "%$dni%"]);
+        } else {
+            $query->execute();
+        }
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function cambiar_password_por_id($id_usuario, $hash) {
+        $sql = "UPDATE usuario SET contrasena = :hash WHERE id_usuario = :id";
+        $stmt = $this->acceso->prepare($sql);
+        return $stmt->execute([':hash'=>$hash, ':id'=>$id_usuario]);
+    }
 
 
 }

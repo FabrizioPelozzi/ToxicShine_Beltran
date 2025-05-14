@@ -93,4 +93,4 @@
 <?php
     include_once "Layouts/General/footer.php";
 ?>
-<script src="registro.js"></script>
+<script src="admin_compras.js"></script>

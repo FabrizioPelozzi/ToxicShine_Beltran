@@ -97,3 +97,56 @@ if ($_POST["funcion"] == "editar_datos") {
     $usuario->editar_datos($id_usuario, $nombre, $apellido, $telefono);
     echo "success";
 }
+
+// Trae datos de usuario
+if ($_POST['funcion'] === 'leer_usuarios') {
+    // recibir filtro DNI (puede venir vacío)
+    $dni = trim($_POST['dni'] ?? '');
+    $usuarios = $usuario->obtener_usuarios($dni);
+
+    // Mapear a JSON limpio (sin exponer la contraseña en claro)
+    $json = array_map(function($u){
+        return [
+            'id_usuario'   => $u->id_usuario,
+            'email'        => $u->email,
+            'dni'          => $u->dni,
+            'nombre'       => $u->nombre,
+            'apellido'     => $u->apellido,
+            'telefono'     => $u->telefono,
+            'tipo_usuario' => $u->tipo_usuario
+        ];
+    }, $usuarios);
+
+    echo json_encode($json);
+    exit;
+}
+
+// Editar usuario
+if ($_POST['funcion'] === 'editar_usuario_admin') {
+    $id    = intval($_POST['id_usuario_mod']);
+    $email = $_POST['email_mod'];
+    $dni   = $_POST['dni_mod'];
+    // actualizamos solo email y dni
+    $sql = "UPDATE usuario
+            SET email = :email,
+                dni   = :dni
+            WHERE id_usuario = :id";
+    $stmt = $usuario->acceso->prepare($sql);
+    echo $stmt->execute([
+        ':email'=>$email,
+        ':dni'=>$dni,
+        ':id'  =>$id
+    ]) ? 'success' : 'error';
+    exit;
+}
+
+// Restablecer contraseña
+if ($_POST['funcion'] === 'reset_password') {
+    $id = intval($_POST['id_usuario']);
+    $nueva = $_POST['nueva_password'];       // en texto claro recibido
+    $hash  = password_hash($nueva, PASSWORD_DEFAULT);
+    $usuario->cambiar_password_por_id($id, $hash);
+    echo json_encode(['status' => 'success']);
+    exit;
+}
+

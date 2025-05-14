@@ -32,7 +32,7 @@ $(document).ready(function(){
                             title: "Acceso denegado",
                             text: "No tienes permiso para acceder a esta sección."
                         }).then(() => {
-                            window.location.href = "../index.php";
+                            window.location.href = "index.php";
                         });
                         return;
                     }
@@ -51,7 +51,7 @@ $(document).ready(function(){
                         title: "Sesión no iniciada",
                         text: "Por favor inicia sesión para acceder.",
                     }).then(() => {
-                        window.location.href = "../Views/login.php";
+                        window.location.href = "login.php";
                     });
                 }
     
@@ -106,8 +106,7 @@ $(document).ready(function(){
         } catch (e) {
           console.error("Error en fetch/compras:", e);
         }
-    }
-    
+    }    
 
     document.addEventListener("click", function(e) {
         if (e.target.closest(".ver_detalle_compra")) {

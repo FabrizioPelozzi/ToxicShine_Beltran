@@ -54,7 +54,7 @@
     </div>      
 </div>
 
-<body class="hold-transition sidebar-mini sidebar-collapse">
+<body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
@@ -93,7 +93,7 @@
     /* Eliminar bordes de cualquier otro contenedor en la sidebar */
     .sidebar, .brand-link, .sidebar-menu {
         border: none !important;
-    } 
+    }
   </style>
     
     <!-- Sidebar -->

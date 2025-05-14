@@ -1,7 +1,7 @@
 $(document).ready(function(){
     Loader();
-    setTimeout(verificar_sesion,1000);
-    //verificar_sesion();
+    //setTimeout(verificar_sesion,1000);
+    verificar_sesion();
 
     // Cargar Pagina
     async function verificar_sesion() {

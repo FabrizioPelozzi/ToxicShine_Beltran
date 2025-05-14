@@ -13,26 +13,6 @@
     </div>
 </section>
 
-<section class="content">
-    <div class="card">
-        <div class="card-body">
-            <table id="fav" class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Pedidos</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-        </div>
-        <!-- <div class="card-footer">
-            Footer
-        </div> -->
-    </div>
-</section>
-
 <?php
     include_once "Layouts/General/footer.php";
 ?>

@@ -30,6 +30,7 @@ $(document).ready(function() {
                     ////console.log(sesion);
                     llenar_menu_superior(sesion);
                     llenar_menu_lateral(sesion);
+                    $("#active_nav_todos_productos").addClass("active");
                     $("#usuario_menu").text(sesion.nombre);
                     read_carrito();
                     read_favoritos();
