@@ -4,45 +4,40 @@
 
 <style>
 
-/* #productos thead th:nth-child(3) .dt-orderable-none {
-  display: none;
-}
-
-.ordenar-btns .dt-button {
-  margin-right: 0.5rem;
-}
-
-.search-box {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-} */
-
-/* @media (max-width: 576px) {
-  .search-box {
-    justify-content: flex-end;
-  }
-  .ordenar-btns {
-    flex-wrap: wrap;
-  }
-} */
-  /* Mantener bordes en escritorio */
-
-
-/* En móviles, evitar la expansión horizontal */
-@media (max-width: 767px) {
-    .card {
-        max-width: 100%;
-        margin: 0 10px; /* Asegurar un pequeño margen */
+    /* Contenedor de botones de orden */
+    .sort-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      margin-left: 1rem;    /* separa todo el grupo del borde izquierdo */
+      gap: 0.75rem;         /* espacio uniforme entre los botones */
     }
-
-    /* Ajustar la imagen en móviles */
-    .card-body img {
-        max-width: 100%;
-        object-fit: contain;
-    }
-}
     
+    /* Si quieres margen extra solo a la derecha de cada botón */
+    .sort-buttons button {
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem; /* para filas múltiples, si hay wrap */
+    }
+    
+    /* Opcional: centrar verticalmente si están dentro de un flex más grande */
+    .sort-buttons {
+      align-items: center;
+    }
+
+
+    /* En móviles, evitar la expansión horizontal */
+    @media (max-width: 767px) {
+        .card {
+            max-width: 100%;
+            margin: 0 10px; /* Asegurar un pequeño margen */
+        }
+
+        /* Ajustar la imagen en móviles */
+        .card-body img {
+            max-width: 100%;
+            object-fit: contain;
+        }
+    }
+
 </style>
 
 <!-- Modal Crear Producto -->
@@ -107,8 +102,6 @@
         </div>
     </div>      
 </div>
-
-
 
 <!-- Modal Editar Datos -->
 <div class="modal fade" id="modal_modificar_producto" role="dialog">
@@ -215,31 +208,61 @@
 
 <title> Productos | ToxicShineBeltran</title>
 <section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Productos</h1> <br>
-                <button class="btn btn-success float-end" type="button" data-bs-toggle="modal" data-bs-target="#modal_crear_producto">Agregar producto</button>
-            </div>
+  <div class="container-fluid">
+    <h1>Administrar Productos</h1> <br>
+    <div class="row mb-2 align-items-center">
+      <div class="col-sm-12 col-md-6 mb-2 mb-md-0">
+        <!-- 1) Buscador -->
+        <div class="input-group">
+          <input type="text"
+                 id="filtro_producto"
+                 class="form-control"
+                 placeholder="Buscar producto...">
         </div>
+      </div>
+        <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0">        
+        <butto class="btn btn-success"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#modal_crear_producto">
+          <i class="fas fa-plus"></i> Agregar producto
+        </button>
+      </div>
     </div>
+  </div>
 </section>
+
+<div class="d-flex flex-wrap justify-content-start gap-3 mb-3 sort-buttons ps-3">
+  <button class="btn btn-outline-primary btn-sm active me-2" data-order="fecha_edicion_desc">
+    Edición ↓
+  </button>
+  <button class="btn btn-outline-primary btn-sm me-2" data-order="fecha_edicion_asc">
+    Edición ↑
+  </button>
+  <button class="btn btn-outline-primary btn-sm me-2" data-order="fecha_creacion_desc">
+    Creación ↓
+  </button>
+  <button class="btn btn-outline-primary btn-sm me-2" data-order="fecha_creacion_asc">
+    Creación ↑
+  </button>
+  <button class="btn btn-outline-primary btn-sm me-2" data-order="nombre_asc">
+    Nombre A → Z
+  </button>
+  <button class="btn btn-outline-primary btn-sm" data-order="nombre_desc">
+    Nombre Z → A
+  </button>
+</div>
+
 <section class="content">
-    <div class="card">
-        <div class="card-body">
-            <table id="productos" class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Productos</th>
-                    </tr>
-                </thead>
-            </table>
-            </div>
-        <!-- <div class="card-footer">
-            Footer
-        </div> -->
+  <div class="card">
+    <div class="card-body">
+      <div id="productos" class="row g-4"></div>
     </div>
+  </div>
 </section>
+
+
+
 
 <?php
     include_once "Layouts/General/footer.php";

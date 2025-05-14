@@ -81,7 +81,6 @@ $(document).ready(function() {
             data: { funcion, value },
             async: false,
             success: function (response) {
-                // si response == "success", el DNI ya está en BD, devolvemos false
                 existe = (response.trim() !== "success");
             }
         });

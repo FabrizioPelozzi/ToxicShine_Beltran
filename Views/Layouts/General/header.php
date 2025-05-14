@@ -17,7 +17,7 @@
   <!-- <link rel="stylesheet" href="../Util/Css/bootstrap.min.css"> (desconfigura toda la parte visual de los iconos y las letras) -->
 </head>
 
-<!-- Modal(si se mete adentro del body, se rompe) -->
+<!-- Modal -->
 <div class="modal fade" id="modal_datos" role="dialog">
   <div class="modal-dialog">
       <div class="modal-content">
@@ -85,18 +85,15 @@
     </a>
 
 
-    <style>
+  <style>
     /* Eliminar bordes de la sidebar */
     .main-sidebar {
         border-right: none !important;
     }
-
     /* Eliminar bordes de cualquier otro contenedor en la sidebar */
     .sidebar, .brand-link, .sidebar-menu {
         border: none !important;
-    }
-    
-    
+    } 
   </style>
     
     <!-- Sidebar -->

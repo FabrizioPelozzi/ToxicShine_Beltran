@@ -64,10 +64,10 @@
                 p.imagen_principal AS imagen,
                 p.precio_venta AS precio,
                 p.stock,
-                c.nombre_categoria AS categoria 
+                c.nombre_categoria AS categoria
             FROM producto p
             JOIN categoria c ON p.id_categoria = c.id_categoria
-            WHERE 1=1";
+            WHERE 1=1 and p.estado = 'A'";
 
         
             if ($categoria != "") {

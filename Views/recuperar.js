@@ -105,5 +105,4 @@ $(document).ready(function(){
         toastr.error("No se pudo conectar al servidor.");
       });
     });
-
 });

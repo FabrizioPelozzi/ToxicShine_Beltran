@@ -6,7 +6,7 @@ $(document).ready(function() {
         funcion = "verificar_sesion";
         $.post("../Controllers/UsuarioController.php", { funcion }, (response) => {
             if (response != "") {
-                location.href = "../Index.php";
+                location.href = "Index.php";
             }
         });
     }

@@ -3,7 +3,7 @@ $(document).ready(function() {
     //setTimeout(verificar_sesion,1000);
     verificar_sesion();
 
-    // Listeners
+    // Listeners del filtro
     $('#filtro_nombre')
         .on('input', filtrar_productos);
     $('#filtro_precio_min, #filtro_precio_max')
@@ -56,6 +56,7 @@ $(document).ready(function() {
         }
     } 
     
+    // Llena el selec de categorias activas
     function llenar_select_categorias() {
         $.post('../Controllers/CategoriaController.php',
           { funcion: 'llenar_categorias' },
@@ -68,7 +69,7 @@ $(document).ready(function() {
         );
     }
         
-    // Filtrar y pintar productos
+    // Filtrar productos
     async function filtrar_productos() {
         const params = new URLSearchParams({
           funcion: 'llenar_productos',
@@ -149,6 +150,3 @@ $(document).ready(function() {
         }
     }
 });
-
-
-

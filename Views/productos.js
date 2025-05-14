@@ -3,6 +3,9 @@ $(document).ready(function(){
     //setTimeout(verificar_sesion,1000);
     verificar_sesion();
     
+
+    let allProductos = [];
+
     // Cargar Pagina
     async function verificar_sesion() {
         funcion = "verificar_sesion";
@@ -25,7 +28,7 @@ $(document).ready(function(){
                             title: "Acceso denegado",
                             text: "No tienes permiso para acceder a esta sección."
                         }).then(() => {
-                            window.location.href = "../index.php";
+                            window.location.href = "index.php";
                         });
                         return;
                     }
@@ -46,7 +49,7 @@ $(document).ready(function(){
                         title: "Sesión no iniciada",
                         text: "Por favor inicia sesión para acceder.",
                     }).then(() => {
-                        window.location.href = "../Views/login.php";
+                        window.location.href = "login.php";
                     });
                 }
     
@@ -62,170 +65,151 @@ $(document).ready(function(){
                 text: "Hubo conflicto de código: " + data.status,
             });
         }
-    }    
+    } 
+    
+    // 1) Manejo de clicks en los botones de orden
+    $('.sort-buttons').on('click', 'button', function(){
+      // Marcar activo
+      $('.sort-buttons button').removeClass('active');
+      $(this).addClass('active');
+
+      // Obtener criterio y aplicar orden
+      const criterion = $(this).data('order');
+      applySort(criterion);
+    });
+
 
     async function read_all_productos() {
         const funcion = "read_all_productos";
-        let data = await fetch("../Controllers/ProductoController.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: "funcion=" + funcion
+        let res = await fetch("../Controllers/ProductoController.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "funcion=" + funcion
         });
-        
-        if (data.ok) {
-            let response = await data.text();
-            try {
-                let productos = JSON.parse(response);
-                
-                const table = $("#productos").DataTable({
-                    data: productos,
-                    order: [[1, 'desc']],
-                    columnDefs: [
-                        { targets: 2, orderable: false }
-                      ],                             // orden inicial por fecha_edicion desc
-                    searching: true,
-                    scrollX: true,
-                    autoWidth: false,
-                    responsive: true,
-              
-                    // 2) DOM y botones
-                    dom:
-                     "<'container-fluid mb-3'" +
-                       "<'d-flex flex-wrap justify-content-between align-items-center gap-2'" +
-                         "<'ordenar-btns'B>" +
-                         "<'search-box'f>" +
-                       ">" +
-                     ">" +
-                     "<'row'<'col-12'tr>>" +
-                     "<'row mt-2'<'col-md-6'i><'col-md-6'p>>",
-
-                      buttons: [
-                        {
-                          extend: 'collection',
-                          text: 'Ordenar por',
-                          buttons: [
-                            {
-                              text: 'Edición ↓',
-                              action: function (e, dt, node, config) {
-                                dt.order([1, 'desc']).draw();
-                              }
-                            },
-                            {
-                              text: 'Edición ↑',
-                              action: function (e, dt, node, config) {
-                                dt.order([1, 'asc']).draw();
-                              }
-                            },
-                            {
-                              text: 'Creación ↓',
-                              action: function (e, dt, node, config) {
-                                dt.order([0, 'desc']).draw();
-                              }
-                            },
-                            {
-                              text: 'Creación ↑',
-                              action: function (e, dt, node, config) {
-                                dt.order([0, 'asc']).draw();
-                              }
-                            },
-                            {
-                              text: 'Nombre A → Z',
-                              action: function (e, dt, node, config) {
-                                dt.order([2, 'asc']).draw();
-                              }
-                            },
-                            {
-                              text: 'Nombre Z → A',
-                              action: function (e, dt, node, config) {
-                                dt.order([2, 'desc']).draw();
-                              }
-                            }
-                          ]
-                        }
-                      ],
-                      
-                      
-                    columns: [
-                        { data: 'fecha_creacion', visible: false },
-                        { data: 'fecha_edicion', visible: false },
-                        {
-                            "render": function (data, type, dato, meta) {
-                                let descripcionCorta = dato.descripcion.length > 100 ? dato.descripcion.substring(0, 100) + '...' : dato.descripcion;
-
-                                let template = `
-                                <div class="container-fluid px-2 px-md-4">
-                                  <div class="row justify-content-center">
-                                    <div class="col-12 col-md-10 col-lg-8">
-                                      <div class="card card-widget widget-user-2">
-                                        <div class="widget-user-header bg-success d-flex align-items-center justify-content-between">
-                                          <div class="widget-user-image">
-                                            <img class="img-circle elevation-2" src="../Util/Img/logo.png" alt="User Avatar">
-                                          </div>
-                                          <h4 class="widget-user-username mb-0">${dato.nombre_producto}</h4>
-                                        </div>
-
-                                        <div class="card-body pt-2">
-                                          <div class="row g-2 align-items-center">
-                                            <!-- Info del producto -->
-                                            <div class="col-12 col-md-7">
-                                              <h2 class="lead"><b>Categoria</b></h2>
-                                              <p class="text-muted text-sm"><b>${dato.nombre_categoria}</b></p>
-                                              <h2 class="lead"><b>Descripcion</b></h2>
-                                              <p class="text-muted text-sm"><b>${descripcionCorta}</b></p>
-                                              ${dato.descripcion.length > 100 ? `<a href="#" class="text-info ver-mas" data-descripcion="${dato.descripcion.replace(/"/g, '&quot;')}">Ver más</a>` : ''}
-                                              <h2 class="lead"><b>Precio</b></h2>
-                                              <p class="text-muted text-sm"><b>${dato.precio_venta}</b></p>
-                                              <h2 class="lead"><b>Stock</b></h2>
-                                              <p class="text-muted text-sm"><b>${dato.stock}</b></p>
-                                            </div>
-
-                                            <!-- Imagen -->
-                                            <div class="col-12 col-md-5 text-center">
-                                              <img class="img-fluid rounded shadow-sm mx-auto d-block" style="max-height: 200px; object-fit: contain;" src="../Util/Img/productos/${dato.imagen_principal}" alt="${dato.nombre_producto}">
-                                            </div>
-                                          </div>
-                                        </div>
-
-                                        <div class="card-footer">
-                                          <div class="d-flex justify-content-end flex-wrap gap-2">
-                                            <a class="editar_datos btn btn-info btn-sm" data-id="${dato.id_producto}" href="#">
-                                              <i class="fas fa-pencil-alt"></i> Editar datos
-                                            </a>
-                                            <a class="editar_imagenes btn btn-info btn-sm" data-id="${dato.id_producto}" href="#">
-                                              <i class="fas fa-pencil-alt"></i> Editar imágenes
-                                            </a>
-                                            <a class="eliminar_producto btn btn-danger btn-sm" data-id="${dato.id_producto}" href="#">
-                                              <i class="fas fa-trash"></i> Eliminar
-                                            </a>
-                                          </div>
-                                        </div>
-
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                 </div>`;
-
-
-                                return template;
-                            }
-                        }                        
-                    ],
-                    "destroy": true,
-                    "language": espanol
-                });
-            } catch (error) {
-                //console.error("Error al parsear el JSON:", error);
-                //console.log("Respuesta del servidor:", response);
-            }
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: data.statusText,
-                text: "Hubo conflicto de código: " + data.status,
-            });
+        if (!res.ok) {
+          return Swal.fire("Error", res.statusText, "error");
         }
+        let text = await res.text();
+        try {
+          allProductos = JSON.parse(text);
+        } catch (e) {
+          console.error("JSON parse error:", e, text);
+          allProductos = [];
+        }
+        renderProductos(allProductos);
+        applySort('fecha_edicion_desc');
     }
+
+    // Ordenar al hacer click en una opción
+    $(document).on("click", ".ordenar", function(e){
+        $("#ordenarDropdown").text($(this).text());
+        e.preventDefault();
+        currentSort = $(this).data("order");  // guardamos criterio
+        applyFiltersAndSort();
+    });
+
+    $("#filtro_producto").on("input", function(){
+      applyFiltersAndSort();
+    });
+
+    function applySort(criterion) {
+      switch(criterion) {
+        case 'fecha_edicion_desc':
+          allProductos.sort((a,b) => new Date(b.fecha_edicion) - new Date(a.fecha_edicion));
+          break;
+        case 'fecha_edicion_asc':
+          allProductos.sort((a,b) => new Date(a.fecha_edicion) - new Date(b.fecha_edicion));
+          break;
+        case 'fecha_creacion_desc':
+          allProductos.sort((a,b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
+          break;
+        case 'fecha_creacion_asc':
+          allProductos.sort((a,b) => new Date(a.fecha_creacion) - new Date(b.fecha_creacion));
+          break;
+        case 'nombre_asc':
+          allProductos.sort((a,b) => a.nombre_producto.localeCompare(b.nombre_producto));
+          break;
+        case 'nombre_desc':
+          allProductos.sort((a,b) => b.nombre_producto.localeCompare(a.nombre_producto));
+          break;
+      }
+      renderProductos(allProductos);
+    }
+
+    function renderProductos(productos) {
+        const $c = $("#productos");
+        $c.empty();
+        if (!productos.length) {
+          return $c.html('<p class="text-center text-muted">No hay productos.</p>');
+        }
+        let tpl = "";
+        productos.forEach(p => {
+          let descCorta = p.descripcion.length > 150
+            ? p.descripcion.substring(0, 150) + "…"
+            : p.descripcion;
+          tpl += `
+            <div class="col-12 col-md-3">
+              <div class="card h-100">
+                <!-- Cabecera -->
+                <div class="card-header bg-success text-white">
+                  <h5 class="card-title mb-0">${p.nombre_producto}</h5>
+                </div>
+                <!-- Cuerpo -->
+                <div class="card-body">
+                  <p><strong>Categoría:</strong> ${p.nombre_categoria}</p>
+                  <p><strong>Precio:</strong> $${p.precio_venta}</p>
+                  <p><strong>Stock:</strong> ${p.stock}</p>
+                  <p><strong>Descripción:</strong> ${descCorta}</p>
+                  ${p.descripcion.length > 150 
+                    ? `<a href="#" class="ver-mas text-info" data-descripcion="${p.descripcion.replace(/"/g,'&quot;')}">Ver más</a>`
+                    : ''}
+                </div>
+                <!-- Imagen -->
+                <div class="text-center px-3">
+                  <img src="../Util/Img/productos/${p.imagen_principal}"
+                       class="img-fluid rounded" style="max-height:200px; object-fit:contain;"
+                       alt="${p.nombre_producto}">
+                </div>
+                <!-- Pie con botones -->
+                <div class="card-footer text-end">
+                  <a class="editar_datos btn btn-info btn-sm me-2" data-id="${p.id_producto}" href="#">
+                    <i class="fas fa-pencil-alt"></i> Datos
+                  </a>
+                  <a class="editar_imagenes btn btn-info btn-sm me-2" data-id="${p.id_producto}" href="#">
+                    <i class="fas fa-image"></i> Imágenes
+                  </a>
+                  <a class="eliminar_producto btn btn-danger btn-sm" data-id="${p.id_producto}" href="#">
+                    <i class="fas fa-trash"></i> Eliminar
+                  </a>
+                </div>
+              </div>
+            </div>`;
+        });
+        $c.html(tpl);
+        // Re-attach events
+        $(".ver-mas").off("click").on("click", function(e){
+          e.preventDefault();
+          const full = $(this).data("descripcion");
+          // mostrar full en modal o alert
+          Swal.fire({ title: "Descripción completa", html: full });
+        });
+        $(".editar_datos").off("click").on("click", function(e){
+          e.preventDefault();
+          const id = $(this).data("id");
+          // tu lógica...
+        });
+        $(".editar_imagenes").off("click").on("click", function(e){
+          e.preventDefault();
+          const id = $(this).data("id");
+          // tu lógica...
+        });
+        $(".eliminar_producto").off("click").on("click", function(e){
+          e.preventDefault();
+          const id = $(this).data("id");
+          // tu lógica...
+        });
+    }
+
     
     $(document).on('click', '.ver-mas', function (e) {
         e.preventDefault();

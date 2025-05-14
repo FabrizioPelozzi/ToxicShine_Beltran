@@ -100,6 +100,13 @@ function llenar_menu_lateral(usuario) {
                         <p id="nav_cont_pedidos">Pedidos</p>
                     </a>
                 </li>
+                <li class="nav-header">Soporte</li>
+                <li id="nav_soporte" class="nav-item">
+                    <a id="active_nav_soporte" href="../Views/Soporte.php" class="nav-link">
+                        <i class="nav-icon fa-solid fa-headset"></i>
+                        <p id="nav_cont_soporte">Soporte</p>
+                    </a>
+                </li>
             `;
         }
 
@@ -122,13 +129,13 @@ function llenar_menu_lateral(usuario) {
                 <li id="nav_registro" class="nav-item">
                     <a id="active_nav_registro" href="../Views/registro.php" class="nav-link">
                         <i class="nav-icon fas fa-file-alt"></i>
-                        <p id="nav_cont_reg">Registros de venta</p>
+                        <p id="nav_cont_reg">Administrar compras</p>
                     </a>
                 </li>
-                <li id="nav_adminpedidos" class="nav-item">
-                    <a id="active_nav_adminpedidos" href="../Views/pedidosadmin.php" class="nav-link">
-                        <i class="nav-icon fas fa-solid fa-clipboard"></i>
-                        <p id="nav_cont_adminpedidos">Administrar Pedidos</p>
+                <li id="nav_clientes" class="nav-item">
+                    <a id="active_nav_clientes" href="../Views/admin_clientes.php" class="nav-link">
+                        <i class="nav-icon fa-solid fa-users"></i>
+                        <p id="nav_cont_cli">Administrar clientes</p>
                     </a>
                 </li>
             `;

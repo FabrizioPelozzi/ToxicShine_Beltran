@@ -2,7 +2,7 @@ $(document).ready(function(){
     Loader();
     //setTimeout(verificar_sesion,1000);
     verificar_sesion();
-
+    
     // Cargar Pagina
     async function verificar_sesion() {
         funcion = "verificar_sesion";
@@ -18,7 +18,7 @@ $(document).ready(function(){
                 if (response != "") {
                     let sesion = JSON.parse(response);
     
-                    // Validación de tipo de usuario
+                    // 🔒 Validación de tipo de usuario
                     if (sesion.id_tipo_usuario != 1 && sesion.id_tipo_usuario != 3) {
                         Swal.fire({
                             icon: "error",
@@ -32,11 +32,11 @@ $(document).ready(function(){
     
                     llenar_menu_superior(sesion);
                     llenar_menu_lateral(sesion);
-                    $("#active_nav_pedidosadmin").addClass("active");
+                    $("#active_nav_clientes").addClass("active");
                     $("#usuario_menu").text(sesion.nombre);
                     read_favoritos();
                     read_carrito();
-
+                    
                 } else {
                     // Si no hay sesión, redirigir al login
                     Swal.fire({
@@ -50,7 +50,7 @@ $(document).ready(function(){
     
                 CloseLoader();
             } catch (error) {
-                //console.error("Error en verificar_sesion:", error);
+                console.error("Error en verificar_sesion:", error);
             }
     
         } else {
@@ -60,5 +60,5 @@ $(document).ready(function(){
                 text: "Hubo conflicto de código: " + data.status,
             });
         }
-    }
-})
+    }    
+});

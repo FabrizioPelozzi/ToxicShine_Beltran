@@ -128,8 +128,7 @@ $(document).ready(function(){
                 <button class="btn btn-secondary btn-agregar mt-3" disabled>
                   <i class="fas fa-cart-plus me-2"></i> Añadir al carrito
                 </button>
-
-            `;
+                `;
         } else {
             template = `
                 <p class="fw-bold text-success mb-2">Stock disponible: ${stock}</p>
@@ -142,13 +141,13 @@ $(document).ready(function(){
                 <button class="btn btn-success btn-agregar mt-3" id="btn_agregar_carrito" data-id="${id_producto}">
                     <i class="fas fa-cart-plus fa-lg mr-2"></i> Añadir al carrito
                 </button>
-
- `;
+            `;
         }
+
     
         $("#agregar_carrito").html(template);
     
-        // Si hay stock, habilitar la lógica de botones
+        // Lógica de botones
         if (stock > 0) {
             $("#btn_sumar").on("click", function () {
                 let cantidad = parseInt($("#cantidad_producto").val());
@@ -325,9 +324,8 @@ $(document).ready(function(){
         body:    data.toString()
     });
     const result = await resp.json();
-    //console.log(result);  // para depurar
+    //console.log(result);
 
-    // ← Aquí reemplazamos el if/else por el switch:
     switch (result.mensaje) {
         case 'success':
             Swal.fire({

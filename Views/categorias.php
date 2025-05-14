@@ -2,6 +2,7 @@
     include_once "Layouts/General/header.php";
 ?>
 
+<!-- Modal crear categoria -->
 <div class="modal fade" id="modal_crear_categoria" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -26,6 +27,7 @@
     </div>      
 </div>
 
+<!-- Modal editar categoria -->
 <div class="modal fade" id="modal_editar_categoria" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -51,31 +53,41 @@
     </div>      
 </div>
 
-<title> Categorias | ToxicShineBeltran</title>
+<title> Categorías | ToxicShineBeltrán</title>
 <section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Categorias</h1> <br>
-                <button class="btn btn-success float-end" type="button" data-bs-toggle="modal" data-bs-target="#modal_crear_categoria">Agregar categoria</button>
-            </div>
+  <div class="container-fluid">
+      <h1>Administrar Categorias</h1> <br>
+    <div class="row mb-2 align-items-center">
+      <!-- Columna izquierda: buscador -->
+      <div class="col-12 col-md-6">
+        <div class="input-group mb-0">
+          <input type="text"
+                 id="filtro_categoria"
+                 class="form-control"
+                 placeholder="Buscar categoría...">
         </div>
+      </div>
+      <!-- Columna derecha: botón -->
+      <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0">
+        <button class="btn btn-success"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#modal_crear_categoria">
+          <i class="fas fa-plus"></i> Agregar categoría
+        </button>
+      </div>
     </div>
+  </div>
 </section>
+
+
+
+
 <section class="content">
     <div class="card">
         <div class="card-body">
-            <table id="categoria" class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Categoria</th>
-                    </tr>
-                </thead>
-            </table>
-            </div>
-        <!-- <div class="card-footer">
-            Footer
-        </div> -->
+            <div id="categoria" class="row g-3"></div>
+        </div>
     </div>
 </section>
 <?php

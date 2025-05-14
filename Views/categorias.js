@@ -4,6 +4,9 @@ $(document).ready(function(){
     //setTimeout(verificar_sesion,2000);
     verificar_sesion();
 
+    // Variables Globales
+    let allCategorias = [];
+
     // Cargar Pagina
     async function verificar_sesion() {
         funcion = "verificar_sesion";
@@ -26,7 +29,7 @@ $(document).ready(function(){
                             title: "Acceso denegado",
                             text: "No tienes permiso para acceder a esta sección."
                         }).then(() => {
-                            window.location.href = "../index.php";
+                            window.location.href = "index.php";
                         });
                         return;
                     }
@@ -45,7 +48,7 @@ $(document).ready(function(){
                         title: "Sesión no iniciada",
                         text: "Por favor inicia sesión para acceder.",
                     }).then(() => {
-                        window.location.href = "../Views/login.php";
+                        window.location.href = "login.php";
                     });
                 }
     
@@ -64,63 +67,80 @@ $(document).ready(function(){
     }   
 
     async function read_all_categorias() {
-        const funcion = "read_all_categorias";
-        let data = await fetch("../Controllers/CategoriaController.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: "funcion=" + funcion
-        });
-        
-        if (data.ok) {
-            let response = await data.text();
-            try {
-                let categorias = JSON.parse(response);
-                
-                $("#categoria").DataTable({
-                    data: categorias,
-                    "aaSorting": [],
-                    "searching": true,
-                    "scrollX": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    columns: [
-                        { data: "nombre_categoria" },
-                        {
-                            "render": function (data, type, dato, meta) {
-                                return `<button id_categoria="${dato.id_categoria}" nombre_categoria="${dato.nombre_categoria}" class="edit btn btn-info" title="Editar categoria" type="button" data-bs-toggle="modal" data-bs-target="#modal_editar_categoria">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button id_categoria_mod="${dato.id_categoria}" class="remove btn btn-danger" title="Eliminar categoria">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>`;
-                            }
-                        }
-                    ],
-                    "destroy": true,
-                    "language": espanol
-                });
-    
-                $(document).on("click", ".edit", function () {
-                    const id_categoria = $(this).attr("id_categoria");
-                    const nombre_categoria = $(this).attr("nombre_categoria");
-                    $("#modal_editar_categoria #id_categoria_mod").val(id_categoria);
-                    $("#modal_editar_categoria #nombre_categoria_mod").val(nombre_categoria);
-                    $("#nombre_categoria").val(nombre_categoria);
-                });
-                    //console.log("Valor en el campo id_categoria_mod:", $("#id_categoria_mod").val());
-                    //console.log("Valor en el campo nombre_categoria:", $("#nombre_categoria_mod").val());
-            } catch (error) {
-                //console.error("Error al parsear el JSON:", error);
-                //console.log("Respuesta del servidor:", response);
-            }
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: data.statusText,
-                text: "Hubo conflicto de código: " + data.status,
-            });
-        }
+      const funcion = "read_all_categorias";
+      let res = await fetch("../Controllers/CategoriaController.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "funcion=" + funcion
+      });
+      if (!res.ok) {
+        return Swal.fire("Error", res.statusText, "error");
+      }
+      let text = await res.text();
+      try {
+        allCategorias = JSON.parse(text);
+      } catch (e) {
+        console.error("JSON parse error:", e, text);
+        allCategorias = [];
+      }
+      renderCategorias(allCategorias);
     }
+
+    // Función de render (igual que te pasé antes)
+    function renderCategorias(categorias) {
+        const $c = $("#categoria");
+        $c.empty();
+        
+        if (!categorias.length) {
+          return $c.html('<p class="text-center text-muted">No hay categorías.</p>');
+        }
+
+        let tpl = "";
+        categorias.forEach(cat => {
+          tpl += `
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <div class="card h-100">
+                <!-- Cabecera coloreada -->
+                <div class="card-header bg-primary text-white">
+                  <h5 class="card-title mb-0">${cat.nombre_categoria}</h5>
+                </div>
+                <div class="card-body">
+                </div>
+                <div class="card-footer text-end">
+                  <button data-id="${cat.id_categoria}"
+                          data-nombre="${cat.nombre_categoria}"
+                          class="edit btn btn-info btn-sm me-2"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modal_editar_categoria">
+                    <i class="fas fa-pencil-alt"></i>Editar
+                  </button>
+                  <button data-id="${cat.id_categoria}"
+                          class="remove btn btn-danger btn-sm">
+                    <i class="fas fa-trash-alt"></i>Eliminar
+                  </button>
+                </div>
+              </div>
+            </div>`;
+        });
+    $c.html(tpl);
+    // Re-attach listeners
+    $(".edit").off("click").on("click", function(){
+      const id     = $(this).data("id");
+      const nombre = $(this).data("nombre");
+      $("#modal_editar_categoria #id_categoria_mod").val(id);
+      $("#modal_editar_categoria #nombre_categoria_mod").val(nombre);
+    });
+    }
+
+    // Filtrar en tiempo real al teclear
+    $("#filtro_categoria").on("input", function(){
+      const term = $(this).val().trim().toLowerCase();
+      const fil = allCategorias.filter(cat =>
+        cat.nombre_categoria.toLowerCase().includes(term)
+      );
+      renderCategorias(fil);
+    });
+
 
     // AMB Categoria
     // Crear Categoria
@@ -261,7 +281,7 @@ $(document).ready(function(){
 
     // Eliminar Categoria
     $(document).on("click", ".remove", function () {
-        const id_categoria = $(this).attr("id_categoria_mod");
+        const id_categoria = $(this).data("id");
         ////console.log("ID Categoría enviada:", id_categoria);
 
         Swal.fire({

@@ -32,7 +32,7 @@ $(document).ready(function(){
                         title: "Sesión no iniciada",
                         text: "Por favor inicia sesión para acceder.",
                     }).then(() => {
-                        window.location.href = "../Views/login.php";
+                        window.location.href = "login.php";
                     });
                 }
                 CloseLoader();
