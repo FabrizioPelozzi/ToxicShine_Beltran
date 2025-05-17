@@ -86,7 +86,7 @@ $(document).ready(function(){
       renderCategorias(allCategorias);
     }
 
-    // Función de render (igual que te pasé antes)
+    // Función de render
     function renderCategorias(categorias) {
         const $c = $("#categoria");
         $c.empty();

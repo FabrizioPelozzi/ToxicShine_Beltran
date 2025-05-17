@@ -5,6 +5,7 @@ $(document).ready(function(){
     
 
     let allProductos = [];
+    let currentSort = 'fecha_edicion_desc';
 
     // Cargar Pagina
     async function verificar_sesion() {
@@ -78,7 +79,6 @@ $(document).ready(function(){
       applySort(criterion);
     });
 
-
     async function read_all_productos() {
         const funcion = "read_all_productos";
         let res = await fetch("../Controllers/ProductoController.php", {
@@ -109,31 +109,40 @@ $(document).ready(function(){
     });
 
     $("#filtro_producto").on("input", function(){
-      applyFiltersAndSort();
+      applySort();
     });
 
-    function applySort(criterion) {
-      switch(criterion) {
-        case 'fecha_edicion_desc':
-          allProductos.sort((a,b) => new Date(b.fecha_edicion) - new Date(a.fecha_edicion));
-          break;
-        case 'fecha_edicion_asc':
-          allProductos.sort((a,b) => new Date(a.fecha_edicion) - new Date(b.fecha_edicion));
-          break;
-        case 'fecha_creacion_desc':
-          allProductos.sort((a,b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
-          break;
-        case 'fecha_creacion_asc':
-          allProductos.sort((a,b) => new Date(a.fecha_creacion) - new Date(b.fecha_creacion));
-          break;
-        case 'nombre_asc':
-          allProductos.sort((a,b) => a.nombre_producto.localeCompare(b.nombre_producto));
-          break;
-        case 'nombre_desc':
-          allProductos.sort((a,b) => b.nombre_producto.localeCompare(a.nombre_producto));
-          break;
+    function applySort() {
+      // 1) filtrar por término de búsqueda
+      const term = $("#filtro_producto").val().trim().toLowerCase();
+      let listado = allProductos.filter(p =>
+        p.nombre_producto.toLowerCase().includes(term)
+      );
+
+      // 2) ordenar según currentSort
+      if (currentSort) {
+        listado.sort((a, b) => {
+          switch(currentSort) {
+            case "fecha_edicion_desc":
+              return new Date(b.fecha_edicion) - new Date(a.fecha_edicion);
+            case "fecha_edicion_asc":
+              return new Date(a.fecha_edicion) - new Date(b.fecha_edicion);
+            case "fecha_creacion_desc":
+              return new Date(b.fecha_creacion) - new Date(a.fecha_creacion);
+            case "fecha_creacion_asc":
+              return new Date(a.fecha_creacion) - new Date(b.fecha_creacion);
+            case "nombre_asc":
+              return a.nombre_producto.localeCompare(b.nombre_producto);
+            case "nombre_desc":
+              return b.nombre_producto.localeCompare(a.nombre_producto);
+            default:
+              return 0;
+          }
+        });
       }
-      renderProductos(allProductos);
+
+      // 3) renderizar el resultado
+      renderProductos(listado);
     }
 
     function renderProductos(productos) {

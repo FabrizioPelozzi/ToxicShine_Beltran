@@ -84,7 +84,6 @@ $(document).ready(function(){
         }, 300);
     });
 
-
     // Función que realiza la búsqueda y actualiza el DataTable.
     async function buscar_compras_por_dni(dni) {
         selectedDNI = dni;

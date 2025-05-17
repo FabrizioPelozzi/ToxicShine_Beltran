@@ -11,11 +11,10 @@ if ($_POST["funcion"] === "buscar_compras_por_dni") {
     $estado = (isset($_POST["estado"]) && $_POST["estado"] !== "")
                 ? $_POST["estado"]
                 : null;
+
     if ($dni === "") {
-        // ------------- Sin DNI: traemos de todos los usuarios -------------
         $compras = $compra->obtener_compras_general_all($estado);
     } else {
-        // ------------- Con DNI: buscamos el usuario y luego sus compras -------------
         $usuario = $compra->obtener_id_usuario_por_dni($dni);
         if (!$usuario) {
             echo json_encode([]);
@@ -23,16 +22,30 @@ if ($_POST["funcion"] === "buscar_compras_por_dni") {
         }
         $compras = $compra->obtener_compras_general($usuario->id_usuario, $estado);
     }
-    // Mapeo limpio a JSON
-    $json = array_map(function($c) {
-        return [
+
+    $json = [];
+    foreach ($compras as $c) {
+        // Obtener el detalle de productos
+        $detalle = $compra->obtener_detalle_compra($c->id_compra);
+        $prods = [];
+        foreach ($detalle as $p) {
+            $prods[] = [
+                'nombre_producto' => $p->nombre_producto,
+                'cantidad'        => $p->cantidad,
+                'precio_venta'    => $p->precio_venta
+            ];
+        }
+
+        $json[] = [
             'id_compra'    => $c->id_compra,
             'fecha_compra' => $c->fecha_compra,
             'total'        => $c->total,
             'estado'       => $c->estado,
-            'dni_cliente'  => $c->dni_cliente ?? ''
+            'dni_cliente'  => $c->dni_cliente ?? '',
+            'productos'    => $prods
         ];
-    }, $compras);
+    }
+
     echo json_encode($json);
     exit;
 }

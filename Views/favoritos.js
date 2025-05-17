@@ -72,7 +72,7 @@ $(document).ready(function(){
                             <div class="card-body">
                                 <i class="far fa-heart fa-3x text-muted mb-3"></i>
                                 <p class="card-text">¡Todavía no tenés productos en tus favoritos!</p>
-                                <a href="../index.php" class="btn btn-primary">Explorar productos</a>
+                                <a href="index.php" class="btn btn-primary">Explorar productos</a>
                             </div>
                         </div>
                     `);

@@ -72,7 +72,7 @@ $(document).ready(function(){
                             <div class="card-body">
                                 <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
                                 <p class="card-text">¡Agrega productos para comenzar tu compra!</p>
-                                <a href="../index.php" class="btn btn-primary">Ver productos</a>
+                                <a href="index.php" class="btn btn-primary">Ver productos</a>
                             </div>
                         </div>
                     `);
@@ -295,7 +295,7 @@ $(document).ready(function(){
         let totalText = $("#monto_total_span").text();
         let total = parseFloat(totalText.replace(/[^0-9.]/g, ""));
 
-        console.log("Total enviado al servidor:", total); // 👈 Consola para verificar
+        console.log("Total enviado al servidor:", total); // Consola para verificar
     
         if (isNaN(total) || total <= 0) {
             Swal.fire("Error", "El total de la compra es inválido.", "error");
@@ -312,16 +312,16 @@ $(document).ready(function(){
                 body: formData.toString()
             });
     
-            const data = await response.json();
-            console.log("Respuesta de crear_preferencia.php:", data);
-    
+            const text = await response.text();
+            console.log("Respuesta cruda de crear_preferencia:", text);
+            const data = JSON.parse(text);
             if (data.error) {
-                Swal.fire("Error", data.error, "error");
-                return;
+              console.error("Detalle MP Errors:", data.mp_errors);
+              Swal.fire("Error", data.error + "\nMira consola para más detalles.", "error");
+              return;
             }
-    
-            // Redirigir al pago
             window.location.href = data.init_point;
+
         } catch (error) {
             console.error("Error al crear la preferencia:", error);
             Swal.fire("Error", "No se pudo crear la preferencia de pago.", "error");

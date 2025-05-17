@@ -84,7 +84,7 @@ function llenar_menu_lateral(usuario) {
                 <li class="nav-header">Perfil</li>
                 <li id="nav_favoritos" class="nav-item">
                     <a id="active_nav_favoritos" href="../Views/Favoritos.php" class="nav-link">
-                        <i class="far fa-heart nav-icon"></i>
+                        <i class="fa-solid fa-heart nav-icon"></i>
                         <p id="nav_cont_fav">Favoritos</p>
                     </a>
                 </li>
@@ -124,6 +124,12 @@ function llenar_menu_lateral(usuario) {
                     <a id="active_nav_productos" href="../Views/Productos.php" class="nav-link">
                         <i class="nav-icon fas fa-box"></i>
                         <p id="nav_cont_prod">Productos</p>
+                    </a>
+                </li>
+                <li id="nav_admin_descuentos" class="nav-item">
+                    <a id="active_nav_admin_descuentos" href="../Views/admin_descuentos.php" class="nav-link">
+                        <i class="nav-icon fa-solid fa-percent"></i>
+                        <p id="nav_cont_prod">Descuentos</p>
                     </a>
                 </li>
                 <li id="nav_registro" class="nav-item">
@@ -167,11 +173,11 @@ async function read_favoritos(){
             let template = `
                 <a class="nav-link" data-toggle="dropdown" href="#">`;
             if (favoritos.length == 0) {
-                template += `<i class="far fa-heart"></i>`;
+                template += `<i class="fa-solid fa-heart"></i>`;
                 template1 += `Favoritos`;
             } else {
                 template += `
-                    <i class="far fa-heart"></i>
+                    <i class="fa-solid fa-heart"></i>
                     <span class="badge badge-warning navbar-badge">${favoritos.length}</span>`;
                 template1 += `
                     Favoritos <span class="badge badge-warning right">${favoritos.length}</span>`;

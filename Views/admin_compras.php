@@ -49,11 +49,7 @@
     <div class="row mb-2">
       <div class="col-12">
         <h1>Administrar Compras</h1> <br>
-
-        <!-- Contenedor flex: buscador + botones de estado -->
         <div class="busqueda-y-estados mb-4">
-
-          <!-- 1) Buscador por DNI -->
           <div class="input-group">
             <input type="text"
                    id="dni_busqueda"
@@ -68,10 +64,10 @@
 
           <!-- 2) Botones de estado -->
           <div class="estado-buttons">
-            <button type="button" class="btn btn-info estado-filter" data-status="">Todos</button>
-            <button type="button" class="btn btn-primary estado-filter" data-status="Pendiente">Pendiente</button>
-            <button type="button" class="btn btn-success estado-filter" data-status="Entregado">Entregado</button>
-            <button type="button" class="btn btn-danger estado-filter" data-status="Cancelado">Cancelado</button>
+            <button type="button" class="btn btn-outline-primary btn-sm me-2 estado-filter" data-status="">Todos</button>
+            <button type="button" class="btn btn-outline-primary btn-sm me-2 estado-filter" data-status="Pendiente">Pendiente</button>
+            <button type="button" class="btn btn-outline-primary btn-sm me-2 estado-filter" data-status="Entregado">Entregado</button>
+            <button type="button" class="btn btn-outline-primary btn-sm me-2 estado-filter" data-status="Cancelado">Cancelado</button>
           </div>
         </div>
       </div>
