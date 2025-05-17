@@ -126,6 +126,24 @@ if ($_POST['funcion'] === 'editar_descuento') {
     exit;
 }
 
+if ($_POST['funcion'] === 'descuento_terminado') {
+    date_default_timezone_set('America/Argentina/Cordoba');
+    $now = date('Y-m-d H:i:s');
+
+    try {
+        $migrated = $desc->descuento_terminado($now);
+        echo json_encode([
+            'success'  => true,
+            'migrated' => $migrated,
+            'message'  => "$migrated descuentos expirados movidos y borrados."
+        ]);
+    } catch (Exception $e) {
+        echo json_encode(['success'=>false,'error'=>$e->getMessage()]);
+    }
+    exit;
+}
+
+
 
 
 

@@ -57,6 +57,13 @@ $(document).ready(function(){
 
     //  Función para cargar descuentos activos
     async function buscar_descuentos_activas() {
+        await fetch('../Controllers/DescuentoController.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'funcion=descuento_terminado'
+        })
+        // .then(r => r.json())
+        // .then(json => console.log('Archive result:', json));
         const response = await fetch('../Controllers/DescuentoController.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -236,7 +243,7 @@ $(document).ready(function(){
 
       const form = $(this);
       const data = form.serialize() + '&funcion=crear_descuento_producto';
-      console.log('🚀 serialized data:', data);
+      //console.log('🚀 serialized data:', data);
 
       const res = await fetch('../Controllers/DescuentoController.php', {
         method:'POST',
@@ -244,13 +251,13 @@ $(document).ready(function(){
         body: data
       });
       const raw = await res.text();
-      console.log('🔴 RAW RESPONSE:', raw);
+      //console.log('🔴 RAW RESPONSE:', raw);
 
       let json;
       try {
         json = JSON.parse(raw);
       } catch (err) {
-        console.error('Respuesta inválida:', err);
+        //console.error('Respuesta inválida:', err);
         return Swal.fire('Error','Respuesta inválida del servidor.','error');
       }
 

@@ -83,4 +83,58 @@ class Descuento {
         ]);
     }
 
+    public function descuento_terminado(string $now) {
+        // Asegúrate de que la zona horaria esté bien
+        date_default_timezone_set('America/Argentina/Cordoba');
+
+        // Inicia transacción
+        $this->pdo->beginTransaction();
+        try {
+            // 1) Seleccionar los vencidos
+            $sqlSel = "SELECT id_descuento, id_producto, porcentaje, inicio, fin
+                       FROM descuento
+                       WHERE fin < :now";
+            $stmtSel = $this->pdo->prepare($sqlSel);
+            $stmtSel->execute([':now' => $now]);
+            $rows = $stmtSel->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!empty($rows)) {
+                // 2) Insertar en historial
+                $sqlIns = "INSERT INTO descuento_historial
+                            (id_descuento, id_producto, porcentaje, inicio, fin)
+                           VALUES
+                            (:id_descuento, :id_producto, :porcentaje, :inicio, :fin)";
+                $stmtIns = $this->pdo->prepare($sqlIns);
+
+                foreach ($rows as $r) {
+                    $stmtIns->execute([
+                        ':id_descuento' => $r['id_descuento'],
+                        ':id_producto'  => $r['id_producto'],
+                        ':porcentaje'   => $r['porcentaje'],
+                        ':inicio'       => $r['inicio'],
+                        ':fin'          => $r['fin']
+                    ]);
+                }
+
+                // 3) Borrar los expirados y contar cuántos
+                $sqlDel = "DELETE FROM descuento WHERE fin < :now";
+                $stmtDel = $this->pdo->prepare($sqlDel);
+                $stmtDel->execute([':now' => $now]);
+                $deleted = $stmtDel->rowCount();
+
+            } else {
+                $deleted = 0;
+            }
+
+            // Todo OK: commit
+            $this->pdo->commit();
+            return $deleted;
+
+        } catch (Exception $e) {
+            // Si algo falla, deshace
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+
 }
