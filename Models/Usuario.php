@@ -115,16 +115,28 @@ class Usuario {
         $query->execute($variables);
     }
 
-    public function cambiar_password(string $email, string $nueva_pass): bool {
-        $sql = "UPDATE usuario SET contrasena = :pass WHERE email = :email";
+    // Funcion para cambiar la contraseña
+    public function verificar_password(string $email, string $password_plano): ?bool {
+        $sql  = "SELECT contrasena FROM usuario WHERE email = :email";
         $stmt = $this->acceso->prepare($sql);
+        $stmt->execute([':email' => $email]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        if (!$row) {
+            // No existe usuario
+            return null;
+        }
+        return password_verify($password_plano, $row['contrasena']);
+    }
+    
+    public function cambiar_password(string $email, string $hash): bool {
+        $sql  = "UPDATE usuario SET contrasena = :hash WHERE email = :email";
+        $stmt = $this->acceso->prepare($sql);
         try {
-            $stmt->execute([
-                ':pass'  => $nueva_pass, // ya viene hasheada
+            return $stmt->execute([
+                ':hash'  => $hash,
                 ':email' => $email
             ]);
-            return true;
         } catch (PDOException $e) {
             error_log("Error al cambiar contraseña: " . $e->getMessage());
             return false;
@@ -132,7 +144,6 @@ class Usuario {
     }
 
     // Trae todos los usuarios
-
     public function obtener_usuarios($dni = '') {
         $sql = "SELECT 
                     u.id_usuario,
@@ -158,12 +169,6 @@ class Usuario {
             $query->execute();
         }
         return $query->fetchAll(PDO::FETCH_OBJ);
-    }
-
-    public function cambiar_password_por_id($id_usuario, $hash) {
-        $sql = "UPDATE usuario SET contrasena = :hash WHERE id_usuario = :id";
-        $stmt = $this->acceso->prepare($sql);
-        return $stmt->execute([':hash'=>$hash, ':id'=>$id_usuario]);
     }
 
 

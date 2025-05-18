@@ -143,7 +143,7 @@ if ($_POST['funcion'] === 'editar_usuario_admin') {
 // Restablecer contraseña
 if ($_POST['funcion'] === 'reset_password') {
     $id = intval($_POST['id_usuario']);
-    $nueva = $_POST['nueva_password'];       // en texto claro recibido
+    $nueva = $_POST['nueva_password'];
     $hash  = password_hash($nueva, PASSWORD_DEFAULT);
     $usuario->cambiar_password_por_id($id, $hash);
     echo json_encode(['status' => 'success']);

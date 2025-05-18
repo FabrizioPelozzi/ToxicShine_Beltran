@@ -3,7 +3,9 @@ $(document).ready(function(){
 
   // Configuro el validate con regla remote para el email
   $("#form_recuperar").validate({
+    // 1) Definimos las reglas de validación
     rules: {
+      // Paso 1: validar email
       email: {
         required: true,
         email: true,
@@ -14,17 +16,40 @@ $(document).ready(function(){
             funcion: "verificar_email",
             value: () => $("#email").val()
           },
+          // Esperamos "error" para indicar que el email SÍ está registrado
           dataFilter: resp => resp.trim() === "error"
         }
+      },
+      // Paso 3: validar nueva contraseña
+      nueva_pass: {
+        required: true,
+        minlength: 5
+      },
+      // Paso 3: validar que coincida con nueva_pass
+      confirm_pass: {
+        required: true,
+        equalTo: "#nueva_pass"
       }
     },
+
+    // 2) Mensajes personalizados
     messages: {
       email: {
         required: "*Campo obligatorio",
         email: "*Formato inválido",
         remote: "*Correo no registrado"
+      },
+      nueva_pass: {
+        required: "*Campo obligatorio",
+        minlength: "*La contraseña debe tener al menos 5 caracteres"
+      },
+      confirm_pass: {
+        required: "*Campo obligatorio",
+        equalTo: "*Las contraseñas no coinciden"
       }
     },
+
+    // 3) Dónde insertar el mensaje de error
     errorPlacement: function(error, element) {
       error.addClass("text-danger small mt-1");
       if (element.parent(".input-group").length) {
@@ -33,17 +58,15 @@ $(document).ready(function(){
         error.insertAfter(element);
       }
     },
-    submitHandler: function() {
+
+  // 4) Qué hacer cuando el formulario sea "válido" (al enviar email)
+  submitHandler: function() {
+      // sólo manejamos aquí el envío del código al email;
+      // la validación de la nueva contraseña se hace al hacer click en #cambiar_pass
       const email = $("#email").val();
-      // Aquí va la petición POST para enviar código
       $.post("../Controllers/RecuperarController.php",
         { funcion: "enviar_codigo", email },
-        function(response) {
-          // DEBUG: imprime respuesta cruda y trimmed en consola
-        //   console.log("RESP RAW:", response);
-        //   console.log("RESP TRIM:", response.trim());
-
-          // Lógica original de manejo de respuesta
+        response => {
           switch (response.trim()) {
             case "enviado":
               toastr.success("Código enviado.");
@@ -59,6 +82,7 @@ $(document).ready(function(){
         }
       ).fail((jqXHR, textStatus, errorThrown) => {
         console.error("AJAX FAIL:", textStatus, errorThrown);
+        toastr.error("Error de conexión.");
       });
     }
   });
@@ -82,14 +106,20 @@ $(document).ready(function(){
   });
 
   $("#cambiar_pass").click(function() {
-      const nueva = $("#nueva_pass").val().trim();
-      if (nueva.length < 5) {
-        return toastr.error("La contraseña debe tener al menos 5 caracteres.");
-      }
-      $.post("../Controllers/RecuperarController.php",
-        { funcion: "cambiar_pass", nueva_pass: nueva },
-        resp => {
-          if (resp.trim() === "success") {
+    if (!$("#form_recuperar").valid()) {
+      return;
+    }
+
+    const nueva = $("#nueva_pass").val().trim();
+    const confirm = $("#confirm_pass").val().trim();
+
+    $.post("../Controllers/RecuperarController.php", {
+        funcion: "cambiar_pass",
+        nueva_pass: nueva
+      },
+      resp => {
+        switch (resp.trim()) {
+          case "success":
             toastr.options = {
               "onHidden": function() {
                 window.location = "login.php";
@@ -97,12 +127,17 @@ $(document).ready(function(){
               "timeOut": 1500
             };
             toastr.success("Contraseña cambiada.");
-          } else {
+            break;
+          case "same":
+            toastr.error("La nueva contraseña no puede ser la misma que la anterior.");
+            break;
+          default:
             toastr.error("No se pudo cambiar la contraseña.");
-          }
         }
-      ).fail(() => {
-        toastr.error("No se pudo conectar al servidor.");
-      });
+      }
+    ).fail(() => {
+      toastr.error("No se pudo conectar al servidor.");
     });
+  });
+
 });

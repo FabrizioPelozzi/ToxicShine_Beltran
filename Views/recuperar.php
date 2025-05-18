@@ -18,7 +18,13 @@
     width: 50px;
     height: 50px;
     object-fit: cover;
+    
   }
+
+  #form_recuperar .form-group label {
+  margin-bottom: .25rem;
+}
+
 </style>
 <body class="hold-transition login-page">
   <div class="login-box">
@@ -35,43 +41,66 @@
 
         <form id="form_recuperar">
           <!-- Paso 1: Ingresar email -->
-          <div id="step_email">
-            <div class="input-group mb-3">
-              <input id="email" name="email" type="email" class="form-control" placeholder="Correo electrónico" required>
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-envelope"></span>
+          <div id="step_email" style="display: block;">
+            <div class="form-group mb-3">
+              <label for="email">Correo electrónico</label>
+              <div class="input-group">
+                <input id="email" name="email" type="email" class="form-control" placeholder="Correo electrónico" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-envelope"></span>
+                  </div>
                 </div>
               </div>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Enviar código</button>
           </div>
 
-          <!-- Paso 2: Ingresar código (oculto inicialmente) -->
-          <div id="step_codigo" style="display: none;">
-            <div class="input-group mb-3 mt-3">
-              <input id="codigo" name="codigo" type="text" class="form-control" placeholder="Código recibido">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-key"></span>
-                </div>
-              </div>
-            </div>
-            <button type="button" id="validar_codigo" class="btn btn-success btn-block">Validar código</button>
-          </div>
 
-          <!-- Paso 3: Nueva contraseña (oculto inicialmente) -->
-          <div id="step_nueva_pass" style="display: none;">
-            <div class="input-group mb-3 mt-3">
-              <input id="nueva_pass" name="nueva_pass" type="password" class="form-control" placeholder="Nueva contraseña">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-lock"></span>
+          <!-- Paso 2: Código -->
+            <div id="step_codigo" style="display: none;">
+              <div class="form-group mb-3">
+                <label for="codigo">Ingrese el código de verificación</label>
+                <div class="input-group">
+                  <input id="codigo" name="codigo" type="text" class="form-control" placeholder="Código recibido">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-key"></span>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <button type="button" id="validar_codigo" class="btn btn-success btn-block">Validar código</button>
             </div>
-            <button type="button" id="cambiar_pass" class="btn btn-warning btn-block">Cambiar contraseña</button>
-          </div>
+
+            <!-- Paso 3: Nueva contraseña -->
+            <div id="step_nueva_pass" style="display: none;">
+              <div class="form-group mb-3">
+                <label for="nueva_pass">Ingrese su nueva contraseña</label>
+                <div class="input-group">
+                  <input id="nueva_pass" name="nueva_pass" type="password" class="form-control" placeholder="Nueva contraseña">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group mb-3">
+                <label for="confirm_pass">Repita su nueva contraseña</label>
+                <div class="input-group">
+                  <input id="confirm_pass" name="confirm_pass" type="password" class="form-control" placeholder="Repita contraseña">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" id="cambiar_pass" class="btn btn-warning btn-block">Cambiar contraseña</button>
+            </div>
+
+
         </form>
 
         <p class="mt-3 mb-0">

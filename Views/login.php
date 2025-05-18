@@ -36,6 +36,7 @@
       <p class="login-box-msg">inicie sesión</p>
 
       <form id="form-login">
+        <label for="email">Correo electronico</label>
         <div class="input-group mb-3">
           <input id="user" type="text" class="form-control" placeholder="Email" required>
           <div class="input-group-append">
@@ -44,6 +45,7 @@
             </div>
           </div>
         </div>
+        <label for="contrasena">Contraseña</label>
         <div class="input-group mb-3">
           <input id="pass" type="password" class="form-control" placeholder="Contraseña" required>
           <div class="input-group-append">
