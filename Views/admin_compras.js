@@ -3,11 +3,10 @@ $(document).ready(function(){
     //setTimeout(verificar_sesion,1000);
     verificar_sesion();
 
+    // Variables Globales
     let allCompras = [];         
     let selectedDNI = "";
     let selectedStatus = "Pendiente";
-    $(".estado-filter").removeClass("active");
-    $(".estado-filter[data-status='Pendiente']").addClass("active");
     let typingTimer;        
     
     // Cargar Pagina
@@ -43,6 +42,8 @@ $(document).ready(function(){
                     $("#usuario_menu").text(sesion.nombre);
                     read_favoritos();
                     read_carrito();
+                    $(".estado-filter").removeClass("active");
+                    $(".estado-filter[data-status='Pendiente']").addClass("active");
                     buscar_compras_por_dni("");
                 } else {
                     // Si no hay sesión redirigir al login
@@ -69,6 +70,7 @@ $(document).ready(function(){
         }
     }
     
+    // Funcion para filtral segun el boton presionado
     $(".estado-filter").on("click", function(){
         $(".estado-filter").removeClass("active");
         $(this).addClass("active");
@@ -76,6 +78,7 @@ $(document).ready(function(){
         buscar_compras_por_dni(selectedDNI);
     });
 
+    // Función que realiza la búsqueda y actualiza el DataTable.
     $("#dni_busqueda").on("input", function(){
         clearTimeout(typingTimer);
         const dni = $(this).val().trim();
@@ -101,12 +104,13 @@ $(document).ready(function(){
           const text = await res.text();
           const compras = JSON.parse(text || "[]");
           allCompras = compras;
-          renderTabla(allCompras);
+          cargar_tabla(allCompras);
         } catch (e) {
           console.error("Error en fetch/compras:", e);
         }
     }    
 
+    // Función que obtiene el detalle de la compra
     document.addEventListener("click", function(e) {
         if (e.target.closest(".ver_detalle_compra")) {
             e.preventDefault();
@@ -159,17 +163,27 @@ $(document).ready(function(){
         }
     });
 
-    function renderTabla(data) {
+    // Función para cargar la tabla
+    function cargar_tabla(data) {
       const $c = $("#compras");
       $c.empty();
 
       if (!data.length) {
-        return $c.html("<p>No se encontraron compras.</p>");
+        return $c.html(`
+          <div class="col-12 d-flex justify-content-center">
+            <div class="card text-center shadow-sm p-3 mb-3 bg-white rounded" style="max-width: 500px; width: 100%;">
+              <div class="card-body">
+                <i class="fas fa-solid fa-file fa-3x text-muted mb-3"></i>
+                <p class="card-text">No se han detectado compras en este momento</p>
+              </div>
+            </div>
+          </div>
+        `);
       }
+
 
       let tpl = "";
       data.forEach(row => {
-        // Determinar color y botones
         let headerClass, botones;
         switch (row.estado) {
           case "Pendiente":

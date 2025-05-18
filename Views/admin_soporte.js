@@ -38,7 +38,7 @@ $(document).ready(function(){
                     $("#usuario_menu").text(sesion.nombre);
                     read_favoritos();
                     read_carrito();
-                    cargarTickets();
+                    read_all_tickets_con_filtro();
                 } else {
                     // Si no hay sesión, redirigir al login
                     Swal.fire({
@@ -66,14 +66,11 @@ $(document).ready(function(){
      
     // Re-filtro
     $('#filtro_estado, #filtro_tipo').on('change', () => {
-      cargarTickets($('#filtro_estado').val(), $('#filtro_tipo').val());
+      read_all_tickets_con_filtro($('#filtro_estado').val(), $('#filtro_tipo').val());
     });
 
-    $('#btn_refrescar').on('click', () => {
-      cargarTickets($('#filtro_estado').val(), $('#filtro_tipo').val());
-    });
-
-    async function cargarTickets(estado = '', tipo = '') {
+    // Cargar tabras segun filtros
+    async function read_all_tickets_con_filtro(estado = '', tipo = '') {
       const params = new URLSearchParams({ funcion: 'leer_tickets' });
       if (estado) params.append('filtro_estado', estado);
       if (tipo)   params.append('filtro_tipo', tipo);
@@ -82,10 +79,11 @@ $(document).ready(function(){
         body: params
       });
       allPeticiones = await res.json();
-      renderTickets(allPeticiones);
+      read_all_tickets(allPeticiones);
     }
 
-    function renderTickets(lista) {
+    // Cargar Tabla
+    function read_all_tickets(lista) {
       const $c = $('#soporte_list');
       $c.empty();
 

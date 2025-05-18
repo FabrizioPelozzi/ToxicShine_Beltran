@@ -38,7 +38,7 @@ $(document).ready(function(){
                     $("#usuario_menu").text(sesion.nombre);
                     read_favoritos();
                     read_carrito();
-                    leerUsuarios('');
+                    read_all_usuarios_por_dni('');
                     
                 } else {
                     // Si no hay sesión, redirigir al login
@@ -68,11 +68,11 @@ $(document).ready(function(){
     // Búsqueda en tiempo real por DNI
     $('#dni_busqueda').on('input', function(){
       const filtro = $(this).val().trim();
-      leerUsuarios(filtro);
+      read_all_usuarios_por_dni(filtro);
     });
 
-    // Fetch al controlador
-    async function leerUsuarios(dni) {
+    // Leer todos los usuarios con filtro
+    async function read_all_usuarios_por_dni(dni) {
       try {
         const params = new URLSearchParams({
           funcion: 'leer_usuarios',
@@ -86,15 +86,15 @@ $(document).ready(function(){
         const text = await res.text();
         const usuarios = JSON.parse(text || '[]');
         allUsuarios = usuarios;
-        renderUsuarios(usuarios);
+        read_all_usuarios(usuarios);
       } catch (e) {
         console.error('Error leyendo usuarios:', e);
         $('#usuario_list').html('<p class="text-danger">Error al cargar usuarios.</p>');
       }
     }
 
-    // Renderizar en un grid de tarjetas
-    function renderUsuarios(lista) {
+    // Leer todos los usuarios
+    function read_all_usuarios(lista) {
       const $c = $('#usuario_list');
       $c.empty();
       if (!lista.length) {
@@ -234,7 +234,7 @@ $(document).ready(function(){
           if (res.trim() === 'success') {
             Swal.fire('Éxito','Datos actualizados','success');
             $('#modal_edit_user').modal('hide');
-            leerUsuarios($('#dni_busqueda').val().trim());
+            read_all_usuarios_por_dni($('#dni_busqueda').val().trim());
           } else {
             Swal.fire('Error','No se pudo actualizar','error');
           }

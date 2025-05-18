@@ -9,7 +9,7 @@ class Descuento {
         $this->pdo = $db->pdo;
     }
 
-    public function getActiveBetween($start, $end) {
+    public function read_all_descuentos($start, $end) {
         $sql = "SELECT 
                     d.id_descuento,
                     p.id_producto,
@@ -22,11 +22,8 @@ class Descuento {
                 FROM descuento d
                 JOIN producto p ON d.id_producto = p.id_producto
                 JOIN categoria c ON p.id_categoria = c.id_categoria
-                WHERE d.inicio <= :now 
-                  AND d.fin    >= :now
-                  AND p.estado = 'A'";
+                WHERE p.estado = 'A'";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':now', $start);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

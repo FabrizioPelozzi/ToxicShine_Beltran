@@ -36,4 +36,4 @@
 <?php
     include_once "Layouts/General/footer.php";
 ?>
-<script src="pedidosadmin.js"></script>
+<script src="admin_pedidos.js"></script>

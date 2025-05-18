@@ -3,10 +3,10 @@ $(document).ready(function(){
     //setTimeout(verificar_sesion,1000);
     verificar_sesion();
 
+    // Variables Globales
     let allCompras     = [];
     let selectedStatus = "";
     let searchTerm     = "";
-    $('.estado-filter[data-status=""]').addClass('active');
 
     // Cargar Pagina
     async function verificar_sesion() {
@@ -29,7 +29,8 @@ $(document).ready(function(){
                     $("#usuario_menu").text(sesion.nombre);
                     read_favoritos();
                     read_carrito();
-                    cargarCompras();
+                    $('.estado-filter[data-status=""]').addClass('active');
+                    buscar_compra_por_usuario();
                 }
                 else {
                     // Si no hay sesión, redirigir al login
@@ -61,16 +62,16 @@ $(document).ready(function(){
       $('.estado-filter').removeClass('active');
       $(this).addClass('active');
       selectedStatus = $(this).data('status');
-      cargarCompras();
+      buscar_compra_por_usuario();
     });
   
     $('#buscar_producto').on('input', function(){
       searchTerm = $(this).val().trim().toLowerCase();
-      renderTabla(filteredCompras());
+      read_all_pedidos(filtrar_compra());
     });
 
       // Función principal de carga
-    async function cargarCompras() {
+    async function buscar_compra_por_usuario() {
         const params = new URLSearchParams({
           funcion: "buscar_compras_por_usuario",
           estado: selectedStatus
@@ -82,22 +83,21 @@ $(document).ready(function(){
         });
         const text    = await res.text();
         allCompras    = JSON.parse(text || "[]");
-        renderTabla(filteredCompras());
+        read_all_pedidos(filtrar_compra());
     }
 
-    function filteredCompras(){
+    function filtrar_compra(){
         return allCompras
           .filter(c => !selectedStatus || c.estado === selectedStatus)
           .filter(c => {
             if (!searchTerm) return true;
-            // ¿Algún producto coincide?
             return c.productos.some(p =>
               p.nombre_producto.toLowerCase().includes(searchTerm)
             );
           });
     }
 
-    function renderTabla(data) {
+    function read_all_pedidos(data) {
         const $c = $('#compras');
         $c.empty();
         if (!data.length) {

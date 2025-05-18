@@ -11,7 +11,7 @@ $desc = new Descuento();
 
 if ($_POST['funcion'] === 'read_active_descuentos') {
     $now = date('Y-m-d H:i:s');
-    $activos = $desc->getActiveBetween($now, $now);
+    $activos = $desc->read_all_descuentos($now, $now);
     echo json_encode($activos);
     exit;
 }
@@ -53,7 +53,6 @@ if ($_POST['funcion'] === 'crear_descuento_producto') {
 }
 
 if ($_POST['funcion'] === 'crear_descuento_categoria') {
-    // 1) Recoge y valida categorías (enteros puros)
     $catsRaw = $_POST['id_categoria'] ?? [];
     $porc    = $_POST['porcentaje']    ?? null;
     $inicio  = $_POST['inicio']        ?? null;
@@ -64,7 +63,6 @@ if ($_POST['funcion'] === 'crear_descuento_categoria') {
         exit;
     }
 
-    // Filtra y castea
     $cats = array_filter(array_map('intval', $catsRaw), fn($v) => $v > 0);
     if (empty($cats)) {
         echo json_encode(['success'=>false,'error'=>'Categorías inválidas']);
@@ -72,13 +70,11 @@ if ($_POST['funcion'] === 'crear_descuento_categoria') {
     }
 
     try {
-        // 2) Obtén productos de esas categorías (IDs ya puros)
         $productos = $desc->getProductosPorCategorias($cats);
 
-        // 3) Inserta cada descuento
         foreach ($productos as $p) {
             $desc->crear_descuento([
-                'id_producto' => (int)$p['id_producto'],  // ya es int
+                'id_producto' => (int)$p['id_producto'],
                 'porcentaje'  => (float)$porc,
                 'inicio'      => $inicio,
                 'fin'         => $fin

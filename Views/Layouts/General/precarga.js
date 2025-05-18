@@ -129,7 +129,13 @@ function llenar_menu_lateral(usuario) {
                 <li id="nav_admin_descuentos" class="nav-item">
                     <a id="active_nav_admin_descuentos" href="../Views/admin_descuentos.php" class="nav-link">
                         <i class="nav-icon fa-solid fa-percent"></i>
-                        <p id="nav_cont_prod">Descuentos</p>
+                        <p id="nav_cont_desc">Descuentos</p>
+                    </a>
+                </li>
+                <li id="nav_admin_pedidos" class="nav-item">
+                    <a id="active_nav_admin_pedidos" href="../Views/admin_pedidos.php" class="nav-link">
+                        <i class="fas fa-shopping-bag nav-icon"></i>
+                        <p id="nav_cont_pedidos">Administrar pedidos</p>
                     </a>
                 </li>
                 <li id="nav_registro" class="nav-item">
@@ -146,7 +152,7 @@ function llenar_menu_lateral(usuario) {
                 </li>
                 <li id="nav_admin_soporte" class="nav-item">
                     <a id="active_nav_admin_soporte" href="../Views/admin_soporte.php" class="nav-link">
-                        <i class="nav-icon fa-solid fa-phone-volume"></i>
+                        <i class="nav-icon fa-solid fa-headset"></i>
                         <p id="nav_cont_cli">Administrar peticiones</p>
                     </a>
                 </li>
@@ -383,12 +389,14 @@ function obtener_datos() {
     });
 }
 
+// Abrir modal
 $(document).on('click', '#abrirModalPerfil', (e) => {
     e.preventDefault();
     obtener_datos();
     $('#modal_datos').modal('show');
 });
 
+// Configuración de la validación del formulario
 $.validator.setDefaults({
     submitHandler: function () {
         funcion="editar_datos";
@@ -419,6 +427,7 @@ $.validator.setDefaults({
     }
 });
 
+// Validación del formulario agregada para solo ingresar letras
 jQuery.validator.addMethod("letras",
     function(value, element) {
         return /^[A-Za-z\s]+$/.test(value);
@@ -426,6 +435,7 @@ jQuery.validator.addMethod("letras",
     "*Este campo solo permite letras"
 );
 
+// Validación del formulario
 $('#form-datos').validate({
     rules: {
         nombre_mod: {

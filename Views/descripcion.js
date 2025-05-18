@@ -42,6 +42,7 @@ $(document).ready(function(){
         }
     }    
 
+    // Cargar pasarela de imagenes
     function mostrar_pasarela(producto) {
         let template = "";
     
@@ -77,6 +78,7 @@ $(document).ready(function(){
         $("#imagenes").html(template);
     }       
     
+    // Cargar Titulo Favorito
     async function mostrar_titulo_favorito() {
         let funcion = "mostrar_titulo_favorito";
         let data = await fetch("../Controllers/FavoritoController.php", {
@@ -119,6 +121,7 @@ $(document).ready(function(){
         }
     }   
 
+    // Cargar Agregar Carrito
     function mostrar_agregar_carrito(stock, precio, id_producto) {
         let template = '';
     
@@ -166,7 +169,8 @@ $(document).ready(function(){
             });
         }
     }    
-          
+    
+    // Cargar Producto
     async function verificar_producto() {
     let funcion = "verificar_producto";
     let data = await fetch("../Controllers/ProductoTiendaController.php", {
@@ -202,6 +206,7 @@ $(document).ready(function(){
     }
     }
     
+    // Cambiar Imagen en la pasarela
     $(document).on("click",".imagen_pasarelas",(e)=>{
         let elemento = $(this)[0].activeElement;
         let img = $(elemento).attr("prod_img");
@@ -209,6 +214,7 @@ $(document).ready(function(){
 
     })
     
+    // Cambiar estado de favorito del producto
     async function cambiar_estado_favorito(id_favorito, estado_favorito) {
         funcion="cambiar_estado_favorito";
         let data = await fetch("../Controllers/FavoritoController.php",{
@@ -246,6 +252,7 @@ $(document).ready(function(){
         }
     }
 
+    // Cambiar estado de favorito del producto
     $(document).on("click",".bandera_favorito",(e)=>{
         let elemento = $(this)[0].activeElement;
         let id_favorito = $(elemento).attr("id_favorito");
@@ -253,6 +260,7 @@ $(document).ready(function(){
         cambiar_estado_favorito(id_favorito, estado_favorito);
     })
 
+    // Agregar producto al carrito
     $(document).on("click", "#btn_agregar_carrito", async function () {
         if (!sesion) {
             Swal.fire({

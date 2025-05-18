@@ -71,7 +71,7 @@
   </div>
 </div>
 
-<!-- Modal: Descuento a Categorías (MULTI‐SELECT) -->
+<!-- Modal: Descuento a Categorías -->
 <div class="modal fade" id="modal_descuento_categoria" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -188,7 +188,8 @@
             <th>% Desc.</th>
             <th>Precio orig.</th>
             <th>Precio desc.</th>
-            <th>Vence en</th>
+            <th>Tiempo restante</th>
+            <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>

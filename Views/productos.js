@@ -74,9 +74,8 @@ $(document).ready(function(){
       $('.sort-buttons button').removeClass('active');
       $(this).addClass('active');
 
-      // Obtener criterio y aplicar orden
-      const criterion = $(this).data('order');
-      applySort(criterion);
+      currentSort = $(this).data('order');
+      applySort();
     });
 
     async function read_all_productos() {

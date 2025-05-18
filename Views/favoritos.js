@@ -52,6 +52,7 @@ $(document).ready(function(){
         }
     }
 
+    // Carga todos los favoritos
     async function read_all_favoritos() {
         let funcion = "read_all_favoritos";
         let data = await fetch("../Controllers/FavoritoController.php", {
@@ -172,6 +173,7 @@ $(document).ready(function(){
         }
     }
 
+    // Eliminar favorito
     $(document).on("click",".eliminar_fav",(e)=>{
         let elemento = $(this)[0].activeElement;
         let id = $(elemento).attr("attrid");
@@ -180,6 +182,7 @@ $(document).ready(function(){
         //eliminar_favorito(id_favorito, estado_favorito);
     })
 
+    // Cambiar estado de favorito
     async function cambiar_estado_favorito(id_favorito, estado_favorito) {
         funcion="cambiar_estado_favorito";
         let data = await fetch("../Controllers/FavoritoController.php",{

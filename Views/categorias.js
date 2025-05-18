@@ -40,7 +40,7 @@ $(document).ready(function(){
                     $("#usuario_menu").text(sesion.nombre);
                     read_favoritos();
                     read_carrito()
-                    read_all_categorias();
+                    llenar_select_categorias();
                 } else {
                     // 🔐 No hay sesión → redirigir al login
                     Swal.fire({
@@ -66,7 +66,7 @@ $(document).ready(function(){
         }
     }   
 
-    async function read_all_categorias() {
+    async function llenar_select_categorias() {
       const funcion = "read_all_categorias";
       let res = await fetch("../Controllers/CategoriaController.php", {
         method: "POST",
@@ -83,11 +83,11 @@ $(document).ready(function(){
         console.error("JSON parse error:", e, text);
         allCategorias = [];
       }
-      renderCategorias(allCategorias);
+      read_all_categorias(allCategorias);
     }
 
     // Función de render
-    function renderCategorias(categorias) {
+    function read_all_categorias(categorias) {
         const $c = $("#categoria");
         $c.empty();
         
@@ -138,11 +138,11 @@ $(document).ready(function(){
       const fil = allCategorias.filter(cat =>
         cat.nombre_categoria.toLowerCase().includes(term)
       );
-      renderCategorias(fil);
+      read_all_categorias(fil);
     });
-
-
+    
     // AMB Categoria
+
     // Crear Categoria
     $.validator.setDefaults({
         submitHandler: function () {
@@ -298,7 +298,7 @@ $(document).ready(function(){
                     funcion: "eliminar_categoria", 
                     id_categoria: id_categoria 
                 }, function(response) {
-                    ////console.log("Respuesta:", response);
+                    //console.log("Respuesta:", response);
                     if (response.trim() === "success") {
                         Swal.fire({
                             title: "Inactivada",
@@ -307,7 +307,7 @@ $(document).ready(function(){
                             showConfirmButton: false,
                             timer: 1000
                         }).then(function () {
-                            read_all_categorias();
+                            llenar_select_categorias();
                         });
                     } else if(response.trim() === "error_existen_productos") {
                         Swal.fire({

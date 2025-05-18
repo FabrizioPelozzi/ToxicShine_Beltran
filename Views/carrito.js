@@ -52,6 +52,7 @@ $(document).ready(function(){
         }
     }
       
+    // Carrito  
     async function read_all_carrito() {
         const funcion = "leer_carrito";
         let data = await fetch("../Controllers/CarritoController.php", {
@@ -153,16 +154,12 @@ $(document).ready(function(){
             });
         }
     }
-
-    // Carrito  
     
     // Función que calcula y actualiza el total de UN ítem
-    function actualizarTotalItem(id) {
-    // 1.1 elemento input y cantidad
+    function actualizar_total_items(id) {
     const $input   = $(`input.input-cantidad[data-id="${id}"]`);
     const cantidad = parseInt($input.val(), 10);
 
-    // 1.2 buscar el <p> que contiene "Precio unitario" y extraer número
     const textoPrecio = $input
         .closest('.card-body')
         .find('p')
@@ -170,17 +167,12 @@ $(document).ready(function(){
         .text();
     const precio = parseFloat(textoPrecio.replace(/[^0-9.]/g, ''));
 
-    // 1.3 calcular nuevo total y volcarlo
     const totalItem = cantidad * precio;
     $input
         .closest('.card-body')
         .find('.item-total')
         .text(totalItem.toFixed(2));
 
-    // 1.4 recalcular total general
-    //actualizarTotalGeneral();
-
-    // 1.5 (Opcional) sincronizar con servidor
     $.post(
         "../Controllers/CarritoController.php",
         { funcion: "actualizar_cantidad", id, cantidad },
@@ -199,7 +191,7 @@ $(document).ready(function(){
         let max = parseInt(input.attr("max"));
         if (cantidad < max) {
             input.val(cantidad + 1);
-            actualizarTotalItem(id);
+            actualizar_total_items(id);
         }
     });
     
@@ -210,7 +202,7 @@ $(document).ready(function(){
         let cantidad = parseInt(input.val());
         if (cantidad > 1) {
             input.val(cantidad - 1);
-            actualizarTotalItem(id);
+            actualizar_total_items(id);
         }
     });
 

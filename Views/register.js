@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var funcion;
+
     verificar_sesion();
 
     // Verificar si el usuario ha iniciado sesión
