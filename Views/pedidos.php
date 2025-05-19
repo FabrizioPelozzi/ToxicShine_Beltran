@@ -25,17 +25,17 @@
   }
 </style>
 
-<!-- Modal para Detalle de Compra (reutilizable) -->
+<!-- Modal para Detalle de Compra -->
 <div class="modal fade" id="modalDetalleCompra" tabindex="-1" role="dialog" aria-labelledby="tituloModal" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
       </div>
       <div class="modal-body">
-        <!-- Se cargará el detalle aquí -->
+        <!-- Aquí se cargará el contenido dinámicamente -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
@@ -46,44 +46,32 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-12">
-        <h1>Mis Pedidos</h1> <br>
-        <div class="busqueda-y-estados mb-4">
-          <!-- 1) Buscador por producto (reemplaza DNI) -->
-          <div class="input-group">
-            <input type="text"
-                   id="buscar_producto"
-                   class="form-control"
-                   placeholder="Buscar por producto…">
-          </div>
-
-          <!-- 2) Botones de estado idénticos al admin -->
-          <div class="estado-buttons">
-            <button type="button"
-                    class="btn btn-outline-primary btn-sm me-2 estado-filter"
-                    data-status="">
-              Todos
-            </button>
-            <button type="button"
-                    class="btn btn-outline-primary btn-sm me-2 estado-filter"
-                    data-status="Pendiente">
-              Pendiente
-            </button>
-            <button type="button"
-                    class="btn btn-outline-primary btn-sm me-2 estado-filter"
-                    data-status="Entregado">
-              Entregado
-            </button>
-            <button type="button"
-                    class="btn btn-outline-primary btn-sm me-2 estado-filter"
-                    data-status="Cancelado">
-              Cancelado
-            </button>
-          </div>
-        </div>
+        <h1>Mis Pedidos</h1>
       </div>
     </div>
   </div>
 </section>
+
+<div class="container-fluid">
+<div class="row mb-3">
+  <div class="col-md-4 mb-2 mb-md-0">
+    <div class="input-group">
+      <input type="text"
+             id="buscar_producto"
+             class="form-control"
+             placeholder="Buscar por producto…">
+    </div>
+  </div>
+  <div class="col-md-6" >
+      <div class=" estado-buttons d-flex flex-wrap">
+        <button type="button" class="btn btn-outline-primary btn-sm me-2 mb-2 estado-filter" data-status="">Todos</button>
+        <button type="button" class="btn btn-outline-primary btn-sm me-2 mb-2 estado-filter" data-status="Pendiente">Pendiente</button>
+        <button type="button" class="btn btn-outline-primary btn-sm me-2 mb-2 estado-filter" data-status="Entregado">Entregado</button>
+        <button type="button" class="btn btn-outline-primary btn-sm mb-2 estado-filter" data-status="Cancelado">Cancelado</button>
+      </div>
+  </div>
+</div>
+</div>
 
 <section class="content">
   <div class="card">

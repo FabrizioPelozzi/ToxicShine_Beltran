@@ -209,9 +209,9 @@
 <title> Productos | ToxicShineBeltran</title>
 <section class="content-header">
   <div class="container-fluid">
-    <h1>Administrar Productos</h1> <br>
-    <div class="row mb-2 align-items-center">
-      <div class="col-sm-12 col-md-6 mb-2 mb-md-0">
+    <h1 >Administrar Productos</h1>
+    <div class="row mb-2 align-items-center mt-3">
+      <div class="col-sm-12 col-md-6 mb-2 mb-md-0 ">
         <!-- 1) Buscador -->
         <div class="input-group">
           <input type="text"

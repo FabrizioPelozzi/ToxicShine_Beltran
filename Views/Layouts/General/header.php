@@ -14,8 +14,47 @@
   <link rel="stylesheet" href="../Util/Css/toastr.min.css">
   <link rel="stylesheet" href="../Util/Css/datatables.min.css">
   <link rel="stylesheet" href="../Util/Css/sweetalert2.min.css">
-  <!-- <link rel="stylesheet" href="../Util/Css/bootstrap.min.css"> (desconfigura toda la parte visual de los iconos y las letras) -->
+
+  <!-- (desconfigura toda la parte visual de los iconos y las letras) -->
+  <!-- <link rel="stylesheet" href="../Util/Css/bootstrap.min.css">  -->
+  <!-- archiov css para todos los archivos -->
+  <!-- <link rel="stylesheet" href="../Util/Css/custom.css"> -->
 </head>
+
+<style>
+  /* Eliminar bordes de la sidebar */
+  .main-sidebar {
+      border-right: none !important;
+  }
+
+  /* Eliminar bordes de cualquier otro contenedor en la sidebar */
+  .sidebar, .brand-link, .sidebar-menu {
+    border: none !important;
+  }
+ 
+    /* Todos los dropdowns del navbar ocuparán el 100% de ancho y se posicionarán a la izquierda */
+  .navbar .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  
+ /* Centrar dropdown bajo su botón */
+  .dropdown-menu-center {
+    position: absolute !important;
+    top: calc(100% + 0.5rem) !important;  /* un pequeño gap bajo el botón */
+    left: 50% !important;                  /* punto de anclaje al 50% del contenedor */
+    transform: translateX(-50%) !important;/* se desplaza la mitad de su propio ancho */
+    right: auto !important;
+    width: auto;                           /* se ajusta al contenido */
+    min-width: 8rem;                       /* opcional: ancho mínimo */
+    border-radius: .25rem;
+  }
+</style>
 
 <!-- Modal -->
 <div class="modal fade" id="modal_datos" role="dialog">
@@ -83,18 +122,6 @@
     <img src="../Util/img/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">ToxicShine Beltran</span>
     </a>
-
-
-  <style>
-    /* Eliminar bordes de la sidebar */
-    .main-sidebar {
-        border-right: none !important;
-    }
-    /* Eliminar bordes de cualquier otro contenedor en la sidebar */
-    .sidebar, .brand-link, .sidebar-menu {
-        border: none !important;
-    }
-  </style>
     
     <!-- Sidebar -->
     <div class="sidebar">
@@ -106,9 +133,7 @@
           </div>
         </ul>
       </nav>
-      <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
   </aside>
 
   <!-- Content Wrapper. Contains page content -->

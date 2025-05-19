@@ -3,6 +3,10 @@ $(document).ready(function(){
     // setTimeout(verificar_sesion,2000);
     verificar_sesion();
 
+    // Variables Globales
+    let allCarrito = [];
+    let searchCarrito = "";
+
     // Cargar Pagina
     async function verificar_sesion() {
         funcion = "verificar_sesion";
@@ -51,110 +55,123 @@ $(document).ready(function(){
             })
         }
     }
-      
-    // Carrito  
+
+    // Busqueda en tiempo real
+    $('#buscar_carrito').on('input', function () {
+      searchCarrito = $(this).val().trim().toLowerCase();
+      renderizar_carrito(filtrar_carrito());
+    });
+
     async function read_all_carrito() {
-        const funcion = "leer_carrito";
-        let data = await fetch("../Controllers/CarritoController.php", {
-            method: "POST",
-            headers: {"Content-Type": "application/x-www-form-urlencoded"},
-            body: "funcion=" + funcion
-        });
-        
-        if (data.ok) {
-            let carrito = await data.json();  // Objeto JSON
-            try {
-                let cartItems = [];
-                let grandTotal = 0;
-                
-                if (carrito.length === 0) {
-                    $("#carrito").html(`
-                        <div class="card text-center shadow-sm p-3 mb-3 bg-white rounded">
-                            <div class="card-body">
-                                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                                <p class="card-text">¡Agrega productos para comenzar tu compra!</p>
-                                <a href="index.php" class="btn btn-primary">Ver productos</a>
-                            </div>
-                        </div>
-                    `);
-                    $("#total_grand").html("");
-                    return;
-                }
-                
-                carrito.forEach(item => {
-                    let precio = parseFloat(item.precio);
-                    let cantidad = parseInt(item.cantidad);
-                    let totalProducto = precio * cantidad;
-                    grandTotal += totalProducto;
-                    
-                    let template = `
-                        <div class="card card-widget widget-user-2">
-                            <div class="widget-user-header bg-info">
-                                <div class="widget-user-image">
-                                    <img class="img-circle elevation-2" src="../Util/Img/productos/${item.imagen}" alt="${item.titulo}">
-                                </div>
-                                <h4 class="widget-user-username">${item.titulo}</h4>
-                                <h5 class="widget-user-desc">Categoría: ${item.categoria}</h5>
-                            </div>
-                            <div class="card-body">
-                                <p>${item.descripcion}</p>
-                                <p>Precio unitario: $${precio.toFixed(2)}</p>
-                                <div class="d-flex align-items-center mb-2">
-                                    <button class="btn btn-danger btn-sm btn-decrementar" data-id="${item.id}">−</button>
-                                    <input type="number" class="form-control input-cantidad ml-2 mr-2" value="${cantidad}" min="1" max="${item.stock}" style="width: 60px; text-align: center;" data-id="${item.id}">
-                                    <button class="btn btn-primary btn-sm btn-incrementar" data-id="${item.id}">+</button>
-                                </div>
-                                <p>Total: $<span class="item-total">${totalProducto.toFixed(2)}</span></p>
-                                <div class="text-right">
-                                    <button class="btn btn-warning btn-sm actualizar_stock" data-id="${item.id}">
-                                        <i class="fas fa-sync"></i> Actualizar stock
-                                    </button>
-                                    <button class="btn btn-danger btn-sm eliminar_carrito" data-id="${item.id}">
-                                        <i class="fas fa-trash-alt"></i> Eliminar
-                                    </button>
-                                    <a href="../Views/descripcion.php?name=${encodeURIComponent(item.titulo)}&&id=${encodeURIComponent(item.id_producto)}" class="btn btn-info btn-sm">
-                                        <i class="fas fa-eye"></i> Ver producto
-                                    </a>
-                                </div>
-                            </div>
-                        </div>`;
-                    cartItems.push({ celda: template });
-                });
-                
-                if ($.fn.DataTable.isDataTable("#carrito")) {
-                    $("#carrito").DataTable().clear().destroy();
-                }
-                $("#carrito").empty();
-                
-                $("#carrito").DataTable({
-                    data: cartItems,
-                    aaSorting: [],
-                    searching: true,
-                    scrollX: true,
-                    autoWidth: false,
-                    responsive: true,
-                    columns: [
-                        { data: "celda" }
-                    ],
-                    destroy: true,
-                    language: espanol,
-                    drawCallback: function () {
-                        $("#total_grand").html(`<button class="btn btn-success" id="finalizar_carrito">Finalizar Carrito</button>`);
-                    }
-                });
-                
-            } catch (error) {
-                console.error("Error al procesar el JSON:", error);
-            }
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: data.statusText,
-                text: "Hubo conflicto de código: " + data.status,
-            });
-        }
+      const funcion = "leer_carrito";
+      let res = await fetch("../Controllers/CarritoController.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "funcion=" + funcion
+      });
+      if (!res.ok) {
+        return Swal.fire({ icon: "error", title: res.statusText, text: "Error código: " + res.status });
+      }
+      try {
+        allCarrito = await res.json();
+        renderizar_carrito(filtrar_carrito());
+      } catch (err) {
+        console.error("Error al parsear JSON:", err);
+      }
     }
+
+    function filtrar_carrito() {
+      if (!searchCarrito) return allCarrito;
+      return allCarrito.filter(item =>
+        item.titulo.toLowerCase().includes(searchCarrito)
+      );
+    }
+
+    function renderizar_carrito(lista) {
+      const $c = $("#carrito");
+      $c.empty();
+        
+      if (!lista.length) {
+        return $c.html(`
+          <div class="col-12 d-flex justify-content-center">
+            <div class="card text-center shadow-sm p-3 mb-3 bg-white rounded" style="max-width: 400px;">
+              <div class="card-body">
+                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                <p class="card-text">Tu carrito está vacío.</p>
+                <a href="index.php" class="btn btn-primary">Seguir comprando</a>
+              </div>
+            </div>
+          </div>
+        `);
+      }
+  
+      lista.forEach(item => {
+        const precio = parseFloat(item.precio);
+        const cantidad = parseInt(item.cantidad, 10);
+        const totalProducto = precio * cantidad;
     
+        const card = `
+          <div class="col-12 col-md-6 mb-4">
+            <div class="card carrito-item h-100">
+              
+              <div class="card-header">
+                <h5>${item.titulo}</h5>
+              </div>
+              
+              <div class="card-body">
+                <div class="carrito-info">
+                  <p class="descripcion-limitada">${item.descripcion}</p>
+                  <p><strong>Categoría:</strong> ${item.categoria}</p>
+                  <p><strong>Precio unitario:</strong> $${precio.toFixed(2)}</p>
+    
+                  <!-- Controles de stock -->
+                  <div class="d-flex align-items-center mb-2">
+                    <button class="btn btn-danger btn-sm btn-decrementar" data-id="${item.id}">−</button>
+                    <input type="number"
+                           class="form-control input-cantidad mx-2"
+                           value="${cantidad}"
+                           min="1"
+                           max="${item.stock}"
+                           style="width: 60px; text-align: center;"
+                           data-id="${item.id}">
+                    <button class="btn btn-primary btn-sm btn-incrementar" data-id="${item.id}">+</button>
+                  </div>
+                  <p><strong>Total:</strong> $<span class="item-total">${totalProducto.toFixed(2)}</span></p>
+                </div>
+    
+                <!-- Imagen a la derecha -->
+                <img src="../Util/Img/productos/${item.imagen}"
+                     alt="${item.titulo}"
+                     class="carrito-img"
+                     onerror="this.onerror=null;this.src='../Util/Img/default-product.png';">
+              </div>
+              
+              <div class="card-footer">
+                <a href="../Views/descripcion.php?name=${encodeURIComponent(item.titulo)}&id=${encodeURIComponent(item.id_producto)}"
+                   class="btn btn-info btn-sm">
+                  <i class="fas fa-eye"></i> Ver producto
+                </a>
+                <button class="btn btn-danger btn-sm eliminar_carrito" data-id="${item.id}">
+                  <i class="fas fa-trash-alt"></i> Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        $c.append(card);
+      });
+  
+      // Botones finales
+      $("#total_grand").html(`
+        <div class="text-end">
+          <button class="btn btn-success" id="finalizar_carrito">
+            <i class="fas fa-check"></i> Finalizar Carrito
+          </button>
+        </div>
+      `);
+    }
+
+
     // Función que calcula y actualiza el total de UN ítem
     function actualizar_total_items(id) {
     const $input   = $(`input.input-cantidad[data-id="${id}"]`);
@@ -203,40 +220,6 @@ $(document).ready(function(){
         if (cantidad > 1) {
             input.val(cantidad - 1);
             actualizar_total_items(id);
-        }
-    });
-
-    // Evento para actualizar la cantidad del producto en el carrito
-    $(document).on("click", ".actualizar_stock", async function () {
-        let id = $(this).data("id");
-        let inputCantidad = $(`input.input-cantidad[data-id="${id}"]`);
-        let cantidad = parseInt(inputCantidad.val());
-        
-        let dataParams = new URLSearchParams();
-        dataParams.append("funcion", "actualizar_cantidad");
-        dataParams.append("id", id);
-        dataParams.append("cantidad", cantidad);
-        
-        let response = await fetch("../Controllers/CarritoController.php", {
-            method: "POST",
-            headers: {"Content-Type": "application/x-www-form-urlencoded"},
-            body: dataParams.toString()
-        });
-        
-        if (response.ok) {
-            const result = await response.text();
-            Swal.fire({
-                icon: "success",
-                title: "Stock actualizado",
-                text: "La cantidad fue modificada correctamente"
-            });
-            read_all_carrito();
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: "Error al actualizar",
-                text: "Intenta nuevamente"
-            });
         }
     });
     

@@ -73,8 +73,7 @@
              JOIN producto p ON f.id_producto = p.id_producto
              WHERE f.id_usuario=:id_usuario
              AND f.estado="A"
-             AND p.estado="A"
-             LIMIT 5';
+             AND p.estado="A"';
         $query = $this->acceso->prepare($sql);
         $variables=array(
             ":id_usuario" => $id_usuario

@@ -1,7 +1,7 @@
 $(document).ready(function(){
     Loader();
-    setTimeout(verificar_sesion,1000)
-    //verificar_sesion();
+    //setTimeout(verificar_sesion,1000)
+    verificar_sesion();
     let sesion = null
     
     //Cargar Pagina
@@ -92,7 +92,7 @@ $(document).ready(function(){
             try {
                 let producto = JSON.parse(response);
                 let template = `
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <div class="d-flex align-items-center gap-2 flex-nowrap">
                         <h3 class="mb-0 me-2">${producto.producto}</h3>
                         ${
                             producto.usuario_sesion !== "" ? `

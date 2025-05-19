@@ -56,8 +56,8 @@
 <title> Categorías | ToxicShineBeltrán</title>
 <section class="content-header">
   <div class="container-fluid">
-      <h1>Administrar Categorias</h1> <br>
-    <div class="row mb-2 align-items-center">
+      <h1>Administrar Categorias</h1>
+    <div class="row mb-2 align-items-center mt-3">
       <!-- Columna izquierda: buscador -->
       <div class="col-12 col-md-6">
         <div class="input-group mb-0">

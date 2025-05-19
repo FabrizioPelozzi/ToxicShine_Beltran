@@ -63,7 +63,7 @@ $(document).ready(function() {
           { funcion: 'llenar_categorias' },
           response => {
             const cats = JSON.parse(response);
-            let tpl = `<option value="">Todas las categorías</option>`;
+            let tpl = `<option value="">Todas</option>`;
             cats.forEach(c => tpl += `<option value="${c.id_categoria}">${c.nombre_categoria}</option>`);
             $('#filtro_categoria').html(tpl);
           }
@@ -116,6 +116,7 @@ $(document).ready(function() {
           productos.forEach(p => {
             tpl += `
               <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <div class="card-wrapper">
                 <div class="card mb-3">
                   <a href="descripcion.php?name=${p.producto}&id=${p.id}">
                     <img src="../Util/Img/productos/${p.imagen}"
@@ -139,6 +140,7 @@ $(document).ready(function() {
                     </div>
                   </div>
                 </div>
+              </div>
               </div>`;
           });
         }

@@ -3,22 +3,11 @@
 
 <style>
     .d-flex.flex-wrap.mb-4 > .btn + .btn {
-    margin-left: 0.5rem; /* ajusta el valor a tu gusto */
-  }
-
-  /* Opcional: si prefieres control más explícito */
-  #btn-nuevo-producto {
+    margin-left: 0.5rem;
     margin-right: 0.5rem;
+
   }
 </style>
-
-
-<title>Admin Descuentos | ToxicShineBeltrán</title>
-<section class="content-header">
-  <div class="container-fluid">
-    <h1>Administrar Descuentos</h1>
-  </div>
-</section>
 
 <!-- Modal: Descuento a Productos -->
 <div class="modal fade" id="modal_descuento_producto" tabindex="-1">
@@ -164,6 +153,12 @@
   </div>
 </div>
 
+<title>Admin Descuentos | ToxicShineBeltrán</title>
+<section class="content-header">
+  <div class="container-fluid">
+    <h1>Administrar Descuentos</h1>
+  </div>
+</section>
 
 <section class="content">
   <div class="container-fluid">

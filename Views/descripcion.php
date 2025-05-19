@@ -6,112 +6,107 @@ if (!empty($_GET["id"])&& $_GET["name"]) {
     ?>
 
 <style>
-.input-cantidad {
-    width: 50px !important; /* Ajuste preciso del ancho */
-    min-width: 50px !important;
-    max-width: 50px !important;
-    text-align: center;
+  .input-cantidad {
+      width: 50px !important; /* Ajuste preciso del ancho */
+      min-width: 50px !important;
+      max-width: 50px !important;
+      text-align: center;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: white;
+  }
+
+  .btn-sm {
+      font-size: 18px !important; /* Asegura que el tamaño del ícono sea visible */
+      width: 35px; /* Tamaño de los botones */
+      height: 35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+  }
+
+  #imagen_principal {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain; /* <- Esto es lo importante */
+    border-radius: 10px;
+    background-color: #f8f9fa; /* fondo neutro si hay espacio en blanco */
+    padding: 10px; /* pequeño padding para que respire */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .imagen_pasarelas {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid #dee2e6;
+    transition: transform 0.2s ease, border 0.2s ease;
+  }
+  .imagen_pasarelas:hover {
+    transform: scale(1.05);
+    border: 1px solid #0d6efd;
+  }
+
+  .btn-agregar {
+    padding: 10px 20px;
     font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: white;
-}
-
-.btn-sm {
-    font-size: 18px !important; /* Asegura que el tamaño del ícono sea visible */
-    width: 35px; /* Tamaño de los botones */
-    height: 35px;
-    display: flex;
-    justify-content: center;
+    border-radius: 8px;
+    display: inline-flex;
     align-items: center;
-    padding: 0;
-}
+    gap: 8px;
+  }
 
-#imagen_principal {
-  width: 100%;
-  max-height: 400px;
-  object-fit: contain; /* <- Esto es lo importante */
-  border-radius: 10px;
-  background-color: #f8f9fa; /* fondo neutro si hay espacio en blanco */
-  padding: 10px; /* pequeño padding para que respire */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+  .input-group .form-control,
+  .input-group .btn {
+    height: 45px; /* Ajusta la altura según tu preferencia */
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+  }
 
-.imagen_pasarelas {
-  width: 90px;
-  height: 90px;
-  object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 1px solid #dee2e6;
-  transition: transform 0.2s ease, border 0.2s ease;
-}
-.imagen_pasarelas:hover {
-  transform: scale(1.05);
-  border: 1px solid #0d6efd;
-}
+  .input-group .btn {
+    padding: 0 20px; /* Ajusta el espaciado interno para darle más ancho */
+    font-size: 1rem;
+  }
+  #producto h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 8px;
+  }
 
-.btn-agregar {
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.input-group .form-control,
-.input-group .btn {
-  height: 45px; /* Ajusta la altura según tu preferencia */
-  display: flex;
-  align-items: center;
-  font-size: 1rem;
-}
-
-.input-group .btn {
-  padding: 0 20px; /* Ajusta el espaciado interno para darle más ancho */
-  font-size: 1rem;
-}
-#producto h3 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  display: inline-block;
-  margin-right: 8px;
-}
-
-.bandera_favorito {
-  padding: 4px 8px;
-  font-size: 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-}
+  .bandera_favorito {
+    padding: 4px 8px;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+  }
 
 
-#categoria, #precio {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-}
+  #categoria, #precio {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
 
-#precio {
-  font-weight: bold;
-  color: #0d6efd;
-}
+  #precio {
+    font-weight: bold;
+    color: #0d6efd;
+  }
 
-#product-desc {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #444;
-}
-
-
-
-
-
-
+  #product-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #444;
+  }
 </style>
+
 <title><?php echo $_GET["name"] ?> / ToxicShineBeltran</title>
 <section class="content-header">
     <div class="container-fluid">
@@ -172,7 +167,7 @@ if (!empty($_GET["id"])&& $_GET["name"]) {
 include_once "Layouts/General/footer.php";
 }
 else {
-    header("Location:../index.php");
+    header("Location: index.php");
 }
 ?>
 <script src="descripcion.js"></script>

@@ -5,7 +5,7 @@ $(document).ready(function(){
 
     // Variables Globales
     let allCompras     = [];
-    let selectedStatus = "";
+    let selectedStatus = "Pendiente";
     let searchTerm     = "";
 
     // Cargar Pagina
@@ -29,7 +29,8 @@ $(document).ready(function(){
                     $("#usuario_menu").text(sesion.nombre);
                     read_favoritos();
                     read_carrito();
-                    $('.estado-filter[data-status=""]').addClass('active');
+                    $(".estado-filter").removeClass("active");
+                    $(".estado-filter[data-status='Pendiente']").addClass("active");
                     buscar_compra_por_usuario();
                 }
                 else {
@@ -58,6 +59,7 @@ $(document).ready(function(){
         }
     }
 
+    // Funcion para filtral segun el boton presionado
     $(document).on('click', '.estado-filter', function(){
       $('.estado-filter').removeClass('active');
       $(this).addClass('active');
@@ -65,15 +67,69 @@ $(document).ready(function(){
       buscar_compra_por_usuario();
     });
   
+    // Función que realiza la búsqueda y actualiza el DataTable
     $('#buscar_producto').on('input', function(){
       searchTerm = $(this).val().trim().toLowerCase();
       read_all_pedidos(filtrar_compra());
     });
 
-      // Función principal de carga
+    // Función que obtiene el detalle de la compra
+    document.addEventListener("click", function(e) {
+        if (e.target.closest(".ver_detalle_compra")) {
+            e.preventDefault();
+            const idCompra = e.target.closest(".ver_detalle_compra").dataset.id;
+    
+            fetch("../Controllers/CompraController.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "funcion=obtener_detalle_compra&id=" + encodeURIComponent(idCompra)
+            })
+            .then(response => response.json())
+            .then(detalles => {
+                //console.log("Detalle de compra:", detalles);
+                
+                let html = `<h4>Detalle de la Compra</h4>`;
+                if (detalles.length > 0) {
+                    html += `<table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                      <th>ID Producto</th>
+                                      <th>Nombre</th>
+                                      <th>Descripción</th>
+                                      <th>Precio de Venta</th>
+                                      <th>Cantidad</th>
+                                  </tr>
+                                </thead>
+                                <tbody>`;
+                    detalles.forEach(item => {
+                        html += `<tr>
+                                    <td>${item.id_producto}</td>
+                                    <td>${item.nombre_producto}</td>
+                                    <td>${item.descripcion}</td>
+                                    <td>$${parseFloat(item.precio_venta).toFixed(2)}</td>
+                                    <td>${item.cantidad}</td>
+                                  </tr>`;
+                    });
+                    html += `   </tbody>
+                              </table>`;
+                } else {
+                    html += `<p>No se encontraron detalles para esta compra.</p>`;
+                }
+    
+                document.querySelector('#modalDetalleCompra .modal-body').innerHTML = html;
+                $('#modalDetalleCompra').modal('show');
+            })
+            .catch(error => {
+                //console.error("Error al obtener el detalle:", error);
+                Swal.fire("Error", "No se pudo cargar el detalle de la compra.", "error");
+            });
+        }
+    });
+
+    // Función principal de carga
     async function buscar_compra_por_usuario() {
         const params = new URLSearchParams({
-          funcion: "buscar_compras_por_usuario",
+          funcion: "buscar_compras_por_dni",
           estado: selectedStatus
         });
         const res  = await fetch("../Controllers/CompraController.php", {
@@ -86,6 +142,7 @@ $(document).ready(function(){
         read_all_pedidos(filtrar_compra());
     }
 
+    // Función de filtrado de productos
     function filtrar_compra(){
         return allCompras
           .filter(c => !selectedStatus || c.estado === selectedStatus)
@@ -97,6 +154,7 @@ $(document).ready(function(){
           });
     }
 
+    // Función carga de todos los pedidos
     function read_all_pedidos(data) {
         const $c = $('#compras');
         $c.empty();
@@ -127,20 +185,18 @@ $(document).ready(function(){
             `<li>${p.nombre_producto} x${p.cantidad} ($${parseFloat(p.precio_venta).toFixed(2)})</li>`
           ).join('');
         
-          tpl += `
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+           tpl += `
+            <div class="col-12 col-sm-4 col-md-4 col-lg-2 mb-4">
               <div class="card h-100">
-                <div class="card-header ${headerClass} text-white d-flex justify-content-between">
+                <div class="card-header ${headerClass} text-white d-flex justify-content-between align-items-center">
+                  <!-- Título siempre a la izquierda -->
                   <span>Pedido #${row.id_compra}</span>
+                  <!-- Estado siempre a la derecha -->
                   <span class="badge bg-light text-dark">${row.estado}</span>
                 </div>
                 <div class="card-body">
                   <p><strong>Fecha:</strong> ${row.fecha_compra}</p>
                   <p><strong>Total:</strong> $${parseFloat(row.total).toFixed(2)}</p>
-                  <details>
-                    <summary>Ver productos</summary>
-                    <ul>${listaProductos}</ul>
-                  </details>
                 </div>
                 <div class="card-footer text-end">
                   <a class="ver_detalle_compra btn btn-info btn-sm" data-id="${row.id_compra}" href="#">
@@ -159,4 +215,4 @@ $(document).ready(function(){
           // tu modal de detalle…
         });
     }
-  });
+});

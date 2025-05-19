@@ -246,20 +246,6 @@ $(document).ready(function(){
       });
 
       $c.html(tpl);
-
-      $(".ver_detalle_compra").off("click").on("click", function(e){
-        e.preventDefault();
-        const id = $(this).data("id");
-        // ... lógica modal ...
-      });
-      $(".completar_compra").off("click").on("click", function(){
-        const id = $(this).data("id");
-        // ... AJAX completar + refresh ...
-      });
-      $(".cancelar_compra").off("click").on("click", function(){
-        const id = $(this).data("id");
-        // ... AJAX cancelar + refresh ...
-      });
     }
 
 });

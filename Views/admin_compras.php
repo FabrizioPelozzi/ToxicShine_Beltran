@@ -46,7 +46,7 @@
 <title> Administrar Compras | ToxicShineBeltrán</title>
 <section class="content-header">
   <div class="container-fluid">
-    <div class="row mb-2">
+    <div class="row mb-3">
       <div class="col-12">
         <h1>Administrar Compras</h1> <br>
         <div class="busqueda-y-estados mb-4">
@@ -55,14 +55,7 @@
                    id="dni_busqueda"
                    class="form-control"
                    placeholder="Ingrese DNI del usuario">
-            <button id="buscar_dni"
-                    class="btn btn-primary d-none"
-                    type="button">
-              Buscar
-            </button>
           </div>
-
-          <!-- 2) Botones de estado -->
           <div class="estado-buttons">
             <button type="button" class="btn btn-outline-primary btn-sm me-2 estado-filter" data-status="">Todos</button>
             <button type="button" class="btn btn-outline-primary btn-sm me-2 estado-filter" data-status="Pendiente">Pendiente</button>

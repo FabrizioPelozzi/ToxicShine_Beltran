@@ -22,40 +22,42 @@ function llenar_menu_superior(usuario) {
         // Mostrar favoritos y carrito solo si es tipo 2 o 3 (usuario o superadmin)
         if (usuario.id_tipo_usuario == 2 || usuario.id_tipo_usuario == 3) {
             template += `
-                <li id="carrito_menu" class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span id="carrito_contador" class="badge badge-danger navbar-badge"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="carrito_menu_lista">
-                        <span class="dropdown-item dropdown-header">Carrito vacío</span>
-                    </div>
-                </li>
-                <li id="favorito" class="nav-item dropdown"></li>
+              <li id="carrito_menu" class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                  <i class="fa-solid fa-shopping-cart"></i>
+                  <span id="carrito_contador" class="badge badge-danger navbar-badge"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-center dropdown-menu-lg">
+                  <span class="dropdown-item dropdown-header">Carrito vacío</span>
+                </div>
+              </li>
+              <li id="favorito" class="nav-item dropdown">
+                <!-- similar structure -->
+              </li>
             `;
+
         }
 
         // Dropdown del usuario
         template2 = `
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                    
-                    <span>Hola, ${displayName}!</span>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+              <span>Hola, ${displayName}!</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right">
+              ${usuario.id_tipo_usuario != 1 ? `
+                <li>
+                  <a class="dropdown-item" href="#" id="abrirModalPerfil">
+                    <i class="fas fa-user-cog"></i> Modificar perfil
+                  </a>
+                </li>` : ""}
+              <li>
+                <a class="dropdown-item" href="../Controllers/logout.php">
+                  <i class="fas fa-user-times"></i> Cerrar sesión
                 </a>
-                <ul class="dropdown-menu">
-                    ${usuario.id_tipo_usuario != 1 ? `
-                        <li>
-                            <a class="dropdown-item" href="#" id="abrirModalPerfil">
-                                <i class="fas fa-user-cog"></i> Modificar perfil
-                            </a>
-                        </li>` : ""}
-                    <li>
-                        <a class="dropdown-item" href="../Controllers/logout.php">
-                            <i class="fas fa-user-times"></i> Cerrar sesión
-                        </a>
-                    </li>
-                </ul>
-            </li>
+              </li>
+            </ul>
+          </li>
         `;
     }
 
@@ -116,7 +118,7 @@ function llenar_menu_lateral(usuario) {
                 <li class="nav-header">Administración</li>
                 <li id="nav_categorias" class="nav-item">
                     <a id="active_nav_categorias" href="../Views/Categorias.php" class="nav-link">
-                        <i class="nav-icon fas fa-apple-alt"></i>
+                        <i class="nav-icon fa-solid fa-list"></i>
                         <p id="nav_cont_cat">Categorías</p>
                     </a>
                 </li>
@@ -197,7 +199,6 @@ async function read_favoritos(){
                     imagen: favorito.imagen,
                     titulo: favorito.titulo,
                     precio: favorito.precio,
-                    cantidad: 1  // Si aplica cantidad en favoritos, ajusta según corresponda
                 });
             });
             template += `<a href="../Views/favoritos.php" class="dropdown-item dropdown-footer">Ver todos tus favoritos</a></div>`;
